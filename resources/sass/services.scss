@@ -1,0 +1,25 @@
+// Variables
+@import 'variables';
+
+.col {
+    cursor: pointer;
+    
+    a {
+        text-align: center;
+        text-decoration: none;
+        .logo {
+            img{
+                width: 150px;
+            }
+        }
+
+        .c_name {
+            color: rgb(104, 104, 104);
+            font-size: 20px;
+        }
+
+        &:hover {
+            background-color: rgb(104, 104, 104);
+        }
+    }
+}
