@@ -56,7 +56,7 @@
     
         .category_head {
             background-color: rgb(240, 240, 240);
-            padding: 5px 30px;
+            padding: 5px 10px;
             font-size: 17px;
             font-weight: bold;
             margin-bottom: 20px;
@@ -64,36 +64,51 @@
     
         ul {
             width: 100%;
+            padding: 0;
     
             li {
+                width: 100%;
+                list-style: none;
+                margin-bottom: 10px;
+                padding: 0 10px;
+                cursor: pointer;
+
                 a {
                     font-size: 15px;
                     font-family: "Noto Serif", serif;
                     color: #5c5c5c;
                     text-decoration: none;
                     font-weight: bold;
+                    text-transform: lowercase;
+                    display: inline-block;
+
+                    &::first-letter {
+                        text-transform: capitalize !important;
+                    }
+
+                    &.main_cat {
+                        width: 100%;
+                        
+                        display: flex;
+                        justify-content: space-between;
+                    }
     
                     @media only screen and (max-width: 1025px) {
                         font-size: 15px;
                     }
+
+                    span {
+                        display: block;
+                        text-transform: lowercase;
+
+                        &::first-letter {
+                            text-transform: capitalize !important;
+                        }
+                    }
                 }
-    
-                width: 100%;
-                list-style: none;
-                margin-bottom: 10px;
-                cursor: pointer;
     
                 @media only screen and (max-width: 1025px) {
                     margin-left: -10px;
-                }
-    
-                span {
-                    margin-left: 40%;
-                    color: #5c5c5c;
-    
-                    @media only screen and (max-width: 1025px) {
-                        margin-left: 20%;
-                    }
                 }
     
                 .card {
@@ -131,11 +146,11 @@
             cursor: pointer;
 
             @media only screen and (max-width: 768px) {
-                content: url(http://localhost:8000/assets/images/carousel/carousal-banner-md.jpg);
+                content: url(https://ayuniya.com/assets/images/carousel/carousal-banner-md.jpg);
                 object-fit: cover;
             }
             @media only screen and (max-width: 425px) {
-                content: url(http://localhost:8000/assets/images/carousel/carousal-banner-sm.jpg);
+                content: url(https://ayuniya.com/assets/images/carousel/carousal-banner-sm.jpg);
             }
         }
     }
@@ -170,7 +185,7 @@
                 object-position: left;
     
                 @media only screen and (max-width: 768px) {
-                    content: url(http://localhost:8000/assets/images/banner/ad-banner-1-md.jpg);
+                    content: url(https://ayuniya.com/assets/images/banner/ad-banner-1-md.jpg);
                     object-fit: contain;
                 }
             }
@@ -292,10 +307,11 @@
             margin-right: 20px;
 
             .image {
-                text-align: center;
                 img {
-                    width: 80%;
-                    height: auto;
+                    width: 100%;
+                    height: 280px;
+                    object-fit: cover;
+                    object-position: center;
 
                     @media only screen and (max-width: 1025px) {
                         height: 200px;
@@ -305,6 +321,7 @@
 
             .details {
                 text-align: center;
+                margin-top: 10px;
 
                 .item_name {
                     font-size: 20px;
@@ -314,6 +331,12 @@
                     a {
                         text-decoration: none;
                         color: #5c5c5c;
+                        display: inline-block;
+                        text-transform: lowercase;
+
+                        &::first-letter {
+                            text-transform: capitalize !important;
+                        }
                     }
                 }
 

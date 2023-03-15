@@ -6,17 +6,32 @@ body {
 }
 
 .bread_crumb {
-    color: rgb(39, 39, 39);
-    font-weight: bold;
-    font-size: 20px;
     margin-left: 100px;
+
+    a {
+        color: rgb(39, 39, 39);
+        font-weight: bold;
+        font-size: 20px;
+        display: inline-block;
+        text-transform: lowercase;
+
+        &::first-letter {
+            text-transform: uppercase;
+        }
+
+        span {
+            color: rgb(170, 170, 170);
+            display: inline-block;
+            text-transform: lowercase;
+
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+    }
 
     @media only screen and (max-width: 683px) {
         display: none;
-    }
-
-    span {
-        color: rgb(170, 170, 170);
     }
 }
 
@@ -163,6 +178,11 @@ body {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     width: 100%;
+                    text-transform: lowercase;
+
+                    &::first-letter {
+                        text-transform: uppercase;
+                    }
 
                     @media only screen and (max-width: 570px) {
                         font-size: 20px;
@@ -192,6 +212,12 @@ body {
                     color: rgb(167, 167, 167);
                     font-size: 16px;
                     text-decoration: none;
+                    display: inline-block;
+                    text-transform: lowercase;
+
+                    &::first-letter {
+                        text-transform: uppercase;
+                    }
 
                     @media only screen and (max-width: 570px) {
                         font-size: 14px;
@@ -350,6 +376,17 @@ body {
             padding-left: 10px;
             font-size: 17px;
             color: rgb(36, 36, 36);
+
+            b {
+                span {
+                    display: inline-block;
+                    text-transform: lowercase;
+
+                    &::first-letter {
+                        text-transform: uppercase;
+                    }
+                }
+            }
         }
 
         .content {
@@ -389,12 +426,11 @@ body {
             margin: 0;
             justify-content: space-evenly;
 
-            .col {
+            .col{
                 width: 210px;
+                border: var(--primary--) 1px solid;
                 background-color: #fff;
-                padding: 10px;
-                padding-left: 20px;
-                padding-right: 20px;
+                padding: 0 0 10px 0;
                 text-align: center;
                 margin-bottom: 10px;
 
@@ -415,25 +451,32 @@ body {
                     width: 260px;
                 }
 
-                .img {
-                    img {
-                        width: 170px;
+                .img{
+                    img{
+                        width: 100%;
                         height: 170px;
+                        object-fit: cover;
+                        object-position: center;
+                        margin-bottom: 10px;
 
                         @media only screen and (max-width: 426px) {
-                            width: 130px;
+                            width: 100%;
                             height: 130px;
                         }
 
                         @media only screen and (max-width: 343px) {
-                            width: 200px;
+                            width: 100%;
                             height: 200px;
                         }
                     }
                 }
 
-                .name {
-                    a {
+                .detail {
+                    padding: 0 20px 10px 20px;
+                }
+
+                .name{
+                    a{
                         text-decoration: none;
                         color: rgb(110, 110, 110);
                         font-size: 18px;
@@ -443,23 +486,28 @@ body {
                         text-overflow: ellipsis;
                         width: 100%;
                         display: block;
+                        text-transform: lowercase;
+
+                        &::first-letter {
+                            text-transform: capitalize !important;
+                        }
                     }
                 }
-
-                .price {
-                    del {
+                
+                .price{
+                    del{
                         color: rgb(241, 0, 0);
                     }
                 }
 
-                .sales_price {
+                .sales_price{
                     color: var(--primary--);
                     font-size: 16px;
                     font-weight: bold;
                 }
 
-                .cart_btn {
-                    button {
+                .cart_btn{
+                    button{
                         width: 100%;
                         background-color: transparent;
                         padding: 5px;
@@ -468,8 +516,9 @@ body {
                         color: var(--primary--);
                         transition: 0.3s;
                         font-weight: bold;
+                        margin-top: 7px;
 
-                        &:hover {
+                        &:hover{
                             background: var(--primary--);
                             color: #fff;
                         }

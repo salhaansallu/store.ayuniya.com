@@ -5,6 +5,7 @@
 <div class="container">
     <div class="shop_inner_nav">
         <div class="breadcrumb">
+            <a href="">
             @isset($request)
             @if ($request == "shop")
                 Home > <span>Shop</span>
@@ -22,6 +23,7 @@
                 Home > Search > <span>{{ $keyword }}</span>
             @endif
             @endisset
+            </a>
         </div>
         <div class="sort">
             <div class="results">
@@ -89,11 +91,13 @@
                     <div class="img">
                         <a href="{{ productURL($product->id, $product->product_name) }}"><img src="{{ validate_image($product->banner) }}" alt=""></a>
                     </div>
-                    <div class="name"><a href="{{ productURL($product->id, $product->product_name) }}">{{  $product->product_name }}</a></div>
-                    <div class="sales_price">{{ min_price($product->sortedvarients)[0] }}</div>
-                    <div class="price"><del>{{ min_price($product->sortedvarients)[1] }}</del></div>
-                    <div class="cart_btn">
-                        <a href="{{ productURL($product->id, $product->product_name) }}"><button>View</button></a>
+                    <div class="detail">
+                        <div class="name"><a href="{{ productURL($product->id, $product->product_name) }}">{{  $product->product_name }}</a></div>
+                        <div class="sales_price">{{ min_price($product->sortedvarients)[0] }}</div>
+                        {{-- <div class="price"><del>{{ min_price($product->sortedvarients)[1] }}</del></div> --}}
+                        <div class="cart_btn">
+                            <a href="{{ productURL($product->id, $product->product_name) }}"><button>View</button></a>
+                        </div>
                     </div>
                 </div>
                 @endif
@@ -114,11 +118,13 @@
                         <div class="img">
                             <a href="{{ productURL($product->id, $product->product_name) }}"><img src="{{ validate_image($product->banner) }}" alt=""></a>
                         </div>
-                        <div class="name"><a href="{{ productURL($product->id, $product->product_name) }}">{{  $product->product_name }}</a></div>
-                        <div class="sales_price">{{ min_price($product->varient)[0] }}</div>
-                        <div class="price"><del>{{ min_price($product->varient)[1] }}</del></div>
-                        <div class="cart_btn">
-                            <a href="{{ productURL($product->id, $product->product_name) }}"><button>View</button></a>
+                        <div class="detail">
+                            <div class="name"><a href="{{ productURL($product->id, $product->product_name) }}">{{  $product->product_name }}</a></div>
+                            <div class="sales_price">{{ min_price($product->varient)[0] }}</div>
+                            {{-- <div class="price"><del>{{ min_price($product->varient)[1] }}</del></div> --}}
+                            <div class="cart_btn">
+                                <a href="{{ productURL($product->id, $product->product_name) }}"><button>View</button></a>
+                            </div>
                         </div>
                     </div>
                     @endif

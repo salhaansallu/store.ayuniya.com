@@ -3,7 +3,7 @@
 @section('content')
 
 <style>
-    body{www
+    body{
         background-color: #fff;
     }
 </style>
@@ -15,7 +15,7 @@
             @isset($categories)
     
             @foreach ($categories as $category)
-            <li><a data-bs-toggle="collapse" href="#{{ str_replace(' ', '_', $category->category_name) }}" role="button" aria-expanded="false" aria-controls="{{ $category->category_name }}"> {{ $category->category_name }} <span> <i class="fa-solid fa-angle-right"></i> </span></a>
+            <li><a class="main_cat" data-bs-toggle="collapse" href="#{{ str_replace(' ', '_', $category->category_name) }}" role="button" aria-expanded="false" aria-controls="{{ $category->category_name }}"> <span>{{ $category->category_name }}</span> <span><i class="fa-solid fa-angle-right"></i></span></a>
                 <div class="collapse" id="{{ str_replace(' ', '_', $category->category_name) }}">
                     <div class="card card-body">
                         <ul>

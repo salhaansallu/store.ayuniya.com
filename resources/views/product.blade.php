@@ -4,7 +4,7 @@
 
 @foreach ($products as $product)
 
-<div class="bread_crumb">{{ $category[0] }} > <span> {{ $subcategory[0] }}</span> </div>    
+<div class="bread_crumb"><a>{{ $category[0] }} > <span> {{ $subcategory[0] }}</span></a> </div>    
 <div class="landing_main">
     <div class="landing_content">
         <div class="images">
@@ -32,7 +32,7 @@
             
             <div class="price">
                 <h3 id="sales_price">{{ min_price($product->varient)[0] }}</h3>
-                <div class="offer"><del id="price">{{ min_price($product->varient)[1] }}</del></div>
+                {{-- <div class="offer"><del id="price">{{ min_price($product->varient)[1] }}</del></div> --}}
             </div>
            
             <div class="varient" id="varient_active">
@@ -58,9 +58,8 @@
                 <div class="col-12"><h6 class="head">Vendor details</h6></div>
                 <div class="col-12" style="margin-left: 10px;"><b>Store : </b> {{ getVendor($product->vendor)[0]['store_name'] }}</div>
                 <div class="col-12" style="margin-left: 10px;"><b>Registration number : </b> {{ getVendor($product->vendor)[0]['registration'] }}</div>
-                <div class="col-12 mb-2" style="margin-left: 10px;"><b>Approvals : </b> {{ getVendor($product->vendor)[0]['store_name'] }}</div>
             </div>
-            <div class="head"><b>Description of {{ $product->product_name }}</b></div>
+            <div class="head"><b>Description of <span>{{ $product->product_name }}</span></b></div>
             <div class="content">
                 {{ $product->long_des }}
             </div>
@@ -68,7 +67,7 @@
     </div>
 
     <div class="md_description">
-        <div class="head"><b>Description of {{ $product->product_name }}</b></div>
+        <div class="head"><b>Description of <span>{{ $product->product_name }}</span></b></div>
         <div class="content">
             {{ $product->long_des }}
         </div>
@@ -81,11 +80,13 @@
                 <div class="img">
                     <a href="{{ productURL($item->id, $item->product_name) }}"><img src="{{ validate_image($item->banner) }}" alt=""></a>
                 </div>
-                <div class="name"><a href="{{ productURL($item->id, $item->product_name) }}">{{ $item->product_name }}</a></div>
-                <div class="sales_price">{{ min_price($item->varient)[0] }}</div>
-                <div class="price"><del>{{ min_price($item->varient)[1] }}</del></div>
-                <div class="cart_btn">
-                    <a href="{{ productURL($item->id, $item->product_name) }}"><button>View</button></a>
+                <div class="detail">
+                    <div class="name"><a href="{{ productURL($item->id, $item->product_name) }}">{{ $item->product_name }}</a></div>
+                    <div class="sales_price">{{ min_price($item->varient)[0] }}</div>
+                    {{-- <div class="price"><del>{{ min_price($item->varient)[1] }}</del></div> --}}
+                    <div class="cart_btn">
+                        <a href="{{ productURL($item->id, $item->product_name) }}"><button>View</button></a>
+                    </div>
                 </div>
             </div>
             @endforeach
