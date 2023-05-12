@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cart;
+use App\Models\currency;
 use App\Models\MainOrders;
 use App\Models\Orders;
 use App\Models\products;
@@ -22,8 +23,7 @@ class checkout extends Controller
         if (Auth::check()) {
             $products = DB::select("select * from varients,carts,products where carts.product_id=varients.sku and varients.pro_id=products.id");
             if (count($products) > 0) {
-                $province = provinces::get();
-                return view('checkout')->with(['title' => 'Checkout | ' . config('app.name'), 'css' => 'checkout.scss', 'products' => $products, 'province' => $province]);
+                return view('checkout')->with(['title' => 'Checkout | ' . config('app.name'), 'css' => 'checkout.scss', 'products' => $products]);
             } else {
                 return redirect('shop');
             }
@@ -83,7 +83,12 @@ class checkout extends Controller
                     $checkout->bill_address = getAddress("billing")['id'];
                     $checkout->ship_address = $address1 . " <br /> " . $city . " <br /> " . $postal . " <br /> " . $country;
                     $checkout->status = "pending";
-                    $checkout->delivery_charge = $delivery;
+                    if ($country == "Sri Lanka") {
+                        $checkout->delivery_charge = $delivery;
+                    }
+                    else {
+                        $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate*65;
+                    }
                     $checkout->total_order = 0.00;
                     if ($checkout->save()) {
                         $order = new Orders();
@@ -150,7 +155,12 @@ class checkout extends Controller
                     $checkout->bill_address = getAddress("billing")['id'];
                     $checkout->ship_address = $address1 . " <br /> " . $city . " <br /> " . $postal . " <br /> " . $country;
                     $checkout->status = "pending";
-                    $checkout->delivery_charge = $delivery;
+                    if ($country == "Sri Lanka") {
+                        $checkout->delivery_charge = $delivery;
+                    }
+                    else {
+                        $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate*65;
+                    }
                     $checkout->total_order = 0.00;
                     if ($checkout->save()) {
                         $products = DB::select("select * from carts, varients where sku=product_id and user_id = " . Auth::user()->id);
@@ -193,5 +203,93 @@ class checkout extends Controller
         }
 
         return response(json_encode($response));
+    }
+
+    public function getTotal(Request $request) {
+        $response = json_encode(array(
+            "error"=>1,
+            "msg"=>"Sorry! Something went wrong"
+        ));
+        $country = sanitize($request->input('country'));
+        if (sanitize($request->input("get_total")) == "cart" && country($country)) {
+            $total = get_cart_total(false);
+            $products = DB::select("select * from varients,carts,products where carts.product_id=varients.sku and varients.pro_id=products.id");
+
+            if ($country == "Sri Lanka") {
+                $response = json_encode(array(
+                    "error"=>0,
+                    "subtotal"=>currency($total),
+                    "del"=> currency(getDelivery($products)),
+                    "total"=> currency((float)getDelivery($products)+(float)$total),
+                ));
+            }
+            else {
+                if (getTotalWeight($products) <= 2) {
+                    if (getTotalWeight($products) >= 0.5) {
+                        $usdtotal = (float)$total/(float)currency::where("type", "=", "USD")->get()[0]->rate;
+                        $response = json_encode(array(
+                            "error"=>0,
+                            "subtotal"=>"USD ".round((float)$usdtotal, 2),
+                            "del"=> "USD 65",
+                            "total"=> "USD ".round((float)$usdtotal+65, 2),
+                        ));
+                    }
+                    else {
+                        $response = json_encode(array(
+                            "error"=>1,
+                            "msg"=>"Order should be more than 0.5KG to be delivered"
+                        ));
+                    }
+                }
+                else {
+                    $response = json_encode(array(
+                        "error"=>1,
+                        "msg"=>"Orders more than 2KG can only be delivered to Sri Lanka"
+                    ));
+                }
+            }
+        }
+        elseif (sanitize($request->input("get_total")) == "product" && country($country)) {
+            $sku = sanitize($request->input("sku"));
+            $qty = sanitize($request->input("qty"));
+            $products = varients::where("sku", "=", $sku)->get();
+            $total = $products[0]->sales_price * $qty;
+
+            if ($country == "Sri Lanka") {
+                $response = json_encode(array(
+                    "error"=>0,
+                    "subtotal"=>currency($total),
+                    "del"=> currency(getDelivery($products)),
+                    "total"=> currency((float)getDelivery($products)+(float)$total),
+                ));
+            }
+            else {
+                if (($products[0]->weight * $qty) <= 2) {
+                    if (($products[0]->weight * $qty) >= 0.5) {
+                        $usdtotal = (float)$total/(float)currency::where("type", "=", "USD")->get()[0]->rate;
+                        $response = json_encode(array(
+                            "error"=>0,
+                            "subtotal"=>"USD ".round((float)$usdtotal, 2),
+                            "del"=> "USD 65",
+                            "total"=> "USD ".round((float)$usdtotal+65, 2),
+                        ));
+                    }
+                    else {
+                        $response = json_encode(array(
+                            "error"=>1,
+                            "msg"=>"Order should be more than 0.5KG to be delivered"
+                        ));
+                    }
+                }
+                else {
+                    $response = json_encode(array(
+                        "error"=>1,
+                        "msg"=>"Orders more than 2KG can only be delivered to Sri Lanka"
+                    ));
+                }
+            }
+        }
+
+        return $response;
     }
 }

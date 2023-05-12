@@ -57,6 +57,7 @@ Route::get('/account/orders', [account::class, 'orders']);
 Route::get('/account/change-password', [account::class, 'changePassword']);
 Route::post('/book/hospital/{date}', [AppoinmentController::class, 'bookAppointment']);
 Route::post('/checkout', [checkout::class, 'buyNow']);
+Route::post('/get-total', [checkout::class, 'getTotal']);
 Route::post('/confirm-checkout', [checkout::class, 'confirmCheckout']);
 
 Route::post('/product/{sku}', [product::class, 'varient']);

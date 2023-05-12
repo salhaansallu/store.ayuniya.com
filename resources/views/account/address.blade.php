@@ -35,10 +35,9 @@
                     <option value="{{ getAddress('billing')['country'] }}">{{ getAddress('billing')['country'] }}</option>
                     <option value="" disabled></option>
                     @endempty
-                    <option value="Sri Lanka">Sri Lanka</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Australia">Australia</option>
-                    <option value="France">France</option>
+                    @foreach (country("get") as $del_country)
+                        <option value="{{ $del_country }}">{{ $del_country }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
@@ -80,10 +79,9 @@
                     <option value="{{ getAddress('shipping')['country'] }}">{{ getAddress('shipping')['country'] }}</option>
                     <option value="" disabled></option>
                     @endempty
-                    <option value="Sri Lanka">Sri Lanka</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Australia">Australia</option>
-                    <option value="France">France</option>
+                    @foreach (country("get") as $del_country)
+                        <option value="{{ $del_country }}">{{ $del_country }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>

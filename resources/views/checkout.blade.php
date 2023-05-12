@@ -58,10 +58,9 @@
                         <option value="{{ getAddress('shipping')['country'] }}">{{ getAddress('shipping')['country'] }}</option>
                         <option value="" disabled></option>
                         @endempty
-                        <option value="Sri Lanka">Sri Lanka</option>
-                        <option value="Canada">Canada</option>
-                        <option value="Australia">Australia</option>
-                        <option value="France">France</option>
+                        @foreach (country("get") as $del_country)
+                        <option value="{{ $del_country }}">{{ $del_country }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -87,10 +86,9 @@
                 <div class="label">Country <span>*</span></div>
                 <div class="input">
                     <select name="country" id="country">
-                        <option value="Sri Lanka">Sri Lanka</option>
-                        <option value="Canada">Canada</option>
-                        <option value="Australia">Australia</option>
-                        <option value="France">France</option>
+                        @foreach (country("get") as $del_country)
+                        <option value="{{ $del_country }}">{{ $del_country }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -107,12 +105,12 @@
             <div class="amount_wrap">
                 <div class="sub_total">
                     <div class="txt">Sub total :</div>
-                    <div class="amount">@isset($qty) {{ currency($products[0]->sales_price * $qty) }} @else {{ get_cart_total() }} @endisset</div>
+                    <div class="amount" id="order_sub_total">@isset($qty) {{ currency($products[0]->sales_price * $qty) }} @else {{ get_cart_total() }} @endisset</div>
                 </div>
     
                 <div class="sub_total">
                     <div class="txt">Delivery charge :</div>
-                    <div class="amount">@isset($qty) {{ currency(getDelivery($products[0]->sku, $qty)) }} @else {{ currency(getDelivery($products)) }} @endisset</div>
+                    <div class="amount" id="order_delivery">@isset($qty) {{ currency(getDelivery($products[0]->sku, $qty)) }} @else {{ currency(getDelivery($products)) }} @endisset</div>
                 </div>
 
                 <div class="sub_total">
@@ -123,81 +121,73 @@
 
             <div class="total">
                 <div class="txt">ORDER TOTAL</div>
-                <div class="amount">@isset($qty) {{ currency(($products[0]->sales_price * $qty)+getDelivery($products[0]->sku, $qty)) }} @else {{ currency(get_cart_total(false)+getDelivery($products)) }} @endisset</div>
+                <div class="amount" id="order_total">@isset($qty) {{ currency(($products[0]->sales_price * $qty)+getDelivery($products[0]->sku, $qty)) }} @else {{ currency(get_cart_total(false)+getDelivery($products)) }} @endisset</div>
             </div>
+            
+            
 
-            <div class="proceed">
-                <button @isset($qty) id="checkout_btn" @else id="checkout_cart" @endisset>Proceed to checkout</button>
-            </div>
+            @isset($qty)
+                <div id="checkout_btn">
+                    <div class="proceed">
+                        <checkout-btn :sku="'{{ $products[0]->sku }}'" :qty="'{{ $qty }}'" ><checkout-btn />
+                    </div>
+                </div>
+            @else
+                <div id="cartcheckout_btn">
+                    <div class="proceed">
+                        <cartcheckout-btn  />
+                    </div>
+                </div>
+            @endisset
+
         </div>
     </div>
 </div>
 
 <script>
+@isset ($qty)
 
-    @isset($qty)
-    
-    $("#checkout_btn").click(function (e) { 
-        e.preventDefault();
-        $(this).prop("disabled",true);
-        $.ajax({
-            type: "post",
-            url: "/confirm-checkout",
-            data: {
-                action: 'confirm_checkout',
-                sku: '{{ $products[0]->sku }}',
-                qty: '{{ $qty }}',
-                address1: $("#address1").val(),
-                postal: $("#postal").val(),
-                city: $("#city").val(),
-                country: $("#country").val(),
-                _token: $("meta[name='csrf-token']").attr('content')
-            },
-            dataType: "json",
-            success: function (checkout) {
-                document.cookie = "order_confirmed=false; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                if (checkout.error==0) {
-                    location.href="/?pid="+checkout.orderno;
-                }
-                else {
-                    toastr.error(checkout.msg, "Error");
-                }
-                $("#checkout_btn").removeAttr("disabled");
+$("#country").change(function () {
+    $.ajax({
+        type: "post",
+        url: "/get-total",
+        data: {get_total: "product", country: this.value, sku: '{{ $products[0]->sku }}', qty: '{{ $qty }}', _token: '{{ csrf_token() }}'},
+        dataType: "json",
+        success: function (response) {
+            if (response.error == 0) {
+                $("#order_sub_total").html(response.subtotal);
+                $("#order_delivery").html(response.del);
+                $("#order_total").html(response.total);
             }
-        });
-    });
-
-    @else
-
-    $("#checkout_cart").click(function (e) { 
-        e.preventDefault();
-        $(this).prop("disabled",true);
-        $.ajax({
-            type: "post",
-            url: "/confirm-checkout",
-            data: {
-                action: 'cart_checkout',
-                address1: $("#address1").val(),
-                postal: $("#postal").val(),
-                city: $("#city").val(),
-                country: $("#country").val(),
-                _token: $("meta[name='csrf-token']").attr('content')
-            },
-            dataType: "json",
-            success: function (cart_checkout) {
-                document.cookie = "order_confirmed=false; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                if (cart_checkout.error==0) {
-                    location.href="/?pid="+cart_checkout.orderno;
-                }
-                else {
-                    toastr.error(cart_checkout.msg, "Error");
-                }
-                $("#checkout_btn").removeAttr("disabled");
+            else {
+                toastr.error(response.msg, "Error");
             }
-        });
+        }
     });
-    
-    @endisset
+});
+
+@else
+
+$("#country").change(function () {
+    $.ajax({
+        type: "post",
+        url: "/get-total",
+        data: {get_total: "cart", country: this.value, _token: '{{ csrf_token() }}'},
+        dataType: "json",
+        success: function (response) {
+            if (response.error == 0) {
+                $("#order_sub_total").html(response.subtotal);
+                $("#order_delivery").html(response.del);
+                $("#order_total").html(response.total);
+            }
+            else {
+                toastr.error(response.msg, "Error");
+            }
+        }
+    });
+});
+
+@endisset
 </script>
     
 @endsection

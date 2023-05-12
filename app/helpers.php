@@ -203,7 +203,7 @@ function country($attr) {
         "Sri Lanka",
         "Canada",
         "Australia",
-        "France",
+        "USA",
     );
 
     if ($attr == "get") {
