@@ -131,7 +131,7 @@ class OrdersController extends Controller
         }
     }
 
-    function updateOrder(Request $request)
+    function updateOrder(Request $request,$courierName, $handoverDate, $trackingCode, $trackingLink)
     {
 
         $response = array();
@@ -172,13 +172,34 @@ class OrdersController extends Controller
                         "msg" => "Order already updated or not available"
                     );
                 }
-            } else {
-                $response = array(
-                    "error" => 1,
-                    "msg" => "Something went wrong"
-                );
             }
-        } else {
+                
+           #Suja 12/06/2023
+           else if (sanitize($request->input('status')) == "pending"){
+            $order = MainOrders::where("id", "=", sanitize($request->input('id')));
+            if ($order->count() > 0){
+                $order->update(["status" => 'Processing']);
+            }
+           }
+         #   } else {
+          #      $response = array(
+          #          "error" => 1,
+          #          "msg" => "Something went wrong"
+          #      );
+            }else if(sanitize($request->input('status')) != "pending" && sanitize($request->input('status')) != "delivered" && sanitize($request->input('status')) != "cancelled"){
+                $order = MainOrders::where("id", "=", sanitize($request->input('id')));
+                if($order->count() > 0){
+                    $order->update(["status" => 'Shipped']);
+                    $order->courier_name = $courierName;
+                    $order->hand_over_date = $handoverDate;
+                    $order->track_code = $trackingCode;
+                    $order->track_link = $trackingLink;
+
+                    $order->save();
+                }
+
+            }
+         else  {
             $response = array(
                 "error" => 1,
                 "msg" => "Something went wrong"

@@ -24,5 +24,9 @@ class MainOrders extends Model
         'print',
         'delivery_charge',
         'total_order',
+        'courier name',
+        'hand over date',
+        'track code',
+        'track link'
     ];
 }
