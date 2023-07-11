@@ -30,6 +30,8 @@ use Illuminate\Support\Facades\Session;
 */
 
 Route::get('/', [index::class, 'index']);
+#Suja 7/6
+Route::get('/stocks/least-available', [StockController::class, 'getLeastAvailableStocks']);
 
 Route::get('/about-us', function () {
     Session::put('redirectAfterLogin', '/about-us');

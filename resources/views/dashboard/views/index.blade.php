@@ -121,6 +121,48 @@
         </div>
     </div>
 
+    <div class="stock">
+        <canvas id="least_stock" ></canvas>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                fetch('/stocks/least-available')
+                    .then(response => response.json())
+                    .then(data => {
+                        const stockData = data.map(stock => stock.qty);
+                        const stockLabels = data.map(stock => stock.pro_id);
+        
+                        // Render the chart
+                        const ctx = document.getElementById('stockChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: stockLabels,
+                                datasets: [{
+                                    label: 'Least Available Stocks',
+                                    data: stockData,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+        
+    </div>
+
     <script>
     function book(id) {
         if (id != "") {
@@ -165,5 +207,7 @@
             });
         }
     }
-</script>
+
+
+        </script>
 @endsection
