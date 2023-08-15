@@ -41,10 +41,22 @@ class OrdersController extends Controller
                 <th>Price</th>
                 <th>Qty</th>
                 <th>Total</th>
-                <th><button class="red" onclick="updateStatus(' . $main_order[0]->id . ', 0)">Cancel</button> <button class="green" onclick="updateStatus(' . $main_order[0]->id . ', 1)">Delivered</button></th>
+                <th><button class="red" onclick="updateStatus(' . $main_order[0]->id . ', 0)">Cancel order</button> <button class="green" onclick="updateStatus(' . $main_order[0]->id . ', 1)">Process</button></th>
             </tr>
             ';
-        } else {
+        }
+        elseif ($main_order[0]->status == "processing") {
+            $html = '
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th><button class="red" onclick="updateStatus(' . $main_order[0]->id . ', 0)">Cancel order</button> <button class="green" onclick="updateStatus(' . $main_order[0]->id . ', 2)">Deliver</button></th>
+            </tr>
+            ';
+        }
+        else {
             $html = '
             <tr>
                 <th>Item</th>
@@ -55,13 +67,13 @@ class OrdersController extends Controller
             </tr>
             ';
         }
-        if (sanitize($request->input('action')) == "get_details" &&  sanitize($request->input('order_number'))) {
+        if (sanitize($request->input('action')) == "get_details" && sanitize($request->input('order_number'))) {
             $orders = Orders::where("order_number", "=", sanitize($request->input('order_number')))->get();
             if ($orders && $orders->count() > 0) {
 
                 foreach ($orders as $order) {
                     $html .= '
-                    
+
                         <tr>
                             <td>
                                 <div class="pro_details">
@@ -93,7 +105,7 @@ class OrdersController extends Controller
                     "data" => $html,
                     "user_details" => $user,
                     "billaddress" => $billaddress,
-                    "orders" => $main_order[0]->ship_address 
+                    "orders" => $main_order[0]->ship_address
                 );
             } else {
                 $response = array(
@@ -113,7 +125,7 @@ class OrdersController extends Controller
 
     function deleteOrder(Request $request)
     {
-        if (sanitize($request->input('action')) == "delete" &&  sanitize($request->input('order_id'))) {
+        if (sanitize($request->input('action')) == "delete" && sanitize($request->input('order_id'))) {
 
             $main_order = MainOrders::where("id", "=", sanitize($request->order_id));
 
@@ -131,17 +143,17 @@ class OrdersController extends Controller
         }
     }
 
-    function updateOrder(Request $request,$courierName, $handoverDate, $trackingCode, $trackingLink)
+    function updateOrder(Request $request)
     {
 
         $response = array();
         if (sanitize($request->input('action')) == "update_status" && sanitize($request->input('id')) && sanitize($request->input('status'))) {
-            if (sanitize($request->input('status')) == "canceled" || sanitize($request->input('status')) == "delivered") {
+            if (sanitize($request->input('status')) == "canceled" || sanitize($request->input('status')) == "delivered" || sanitize($request->input('status')) == "processing" ) {
                 $order = MainOrders::where("id", "=", sanitize($request->input('id')));
                 if ($order->count() > 0) {
                     $order->update(["status" => sanitize($request->input('status'))]);
                     $pros = Orders::where("order_number", "=", $order->get()[0]->order_number);
-                    if (sanitize($request->input('status')) == "delivered") {
+                    if (sanitize($request->input('status')) == "processing") {
                         $profit = 0;
                         foreach ($pros->get() as $pro) {
                             $vendor_total = (75 / 100) * $pro->total;
@@ -154,6 +166,14 @@ class OrdersController extends Controller
                         }
 
                         $order->update(["total_order" => $profit]);
+                    }
+                    elseif (sanitize($request->input('status')) == "delivered") {
+                        $order->update([
+                            "courier_name" => sanitize($request->input("courier_name")),
+                            "hand_over_date" => date("d/m/Y"),
+                            "track_code" => sanitize($request->input("track_code")),
+                            "track_link" => sanitize($request->input("track_link")),
+                        ]);
                     }
                     if ($order) {
                         $response = array(
@@ -173,38 +193,37 @@ class OrdersController extends Controller
                     );
                 }
             }
-                
-           #Suja 12/06/2023
-           else if (sanitize($request->input('status')) == "pending"){
-            $order = MainOrders::where("id", "=", sanitize($request->input('id')));
-            if ($order->count() > 0){
-                $order->update(["status" => 'Processing']);
-            }
-           }
-         #   } else {
-          #      $response = array(
-          #          "error" => 1,
-          #          "msg" => "Something went wrong"
-          #      );
-            }else if(sanitize($request->input('status')) != "pending" && sanitize($request->input('status')) != "delivered" && sanitize($request->input('status')) != "cancelled"){
-                $order = MainOrders::where("id", "=", sanitize($request->input('id')));
-                if($order->count() > 0){
-                    $order->update(["status" => 'Shipped']);
-                    $order->courier_name = $courierName;
-                    $order->hand_over_date = $handoverDate;
-                    $order->track_code = $trackingCode;
-                    $order->track_link = $trackingLink;
 
-                    $order->save();
-                }
+            // #Suja 12/06/2023
+            // else if (sanitize($request->input('status')) == "pending") {
+            //     $order = MainOrders::where("id", "=", sanitize($request->input('id')));
+            //     if ($order->count() > 0) {
+            //         $order->update(["status" => 'Processing']);
+            //     }
+            // }
+            // #   } else {
+            // #      $response = array(
+            // #          "error" => 1,
+            // #          "msg" => "Something went wrong"
+            // #      );
+        } //else if (sanitize($request->input('status')) != "pending" && sanitize($request->input('status')) != "delivered" && sanitize($request->input('status')) != "cancelled") {
+        //     $order = MainOrders::where("id", "=", sanitize($request->input('id')));
+        //     if ($order->count() > 0) {
+        //         $order->update(["status" => 'Shipped']);
+        //         $order->courier_name = $courierName;
+        //         $order->hand_over_date = date("d/m/Y");
+        //         $order->track_code = $trackingCode;
+        //         $order->track_link = $trackingLink;
 
-            }
-         else  {
-            $response = array(
-                "error" => 1,
-                "msg" => "Something went wrong"
-            );
-        }
+        //         $order->save();
+        //     }
+
+        // } else {
+        //     $response = array(
+        //         "error" => 1,
+        //         "msg" => "Something went wrong"
+        //     );
+        // }
 
         return response(json_encode($response));
     }

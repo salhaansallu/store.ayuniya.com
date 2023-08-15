@@ -204,6 +204,7 @@ function country($attr) {
         "Canada",
         "Australia",
         "USA",
+        "New Zealand",
     );
 
     if ($attr == "get") {
@@ -303,8 +304,11 @@ function country($attr) {
 function orderStatus($value)
 {
     if ($value->status == "pending") {
+        return "pending";
+    } elseif ($value->status == "processing") {
         return "Processing";
-    } elseif ($value->status == "delivered") {
+    }
+    elseif ($value->status == "delivered") {
         return "Delivered";
     } elseif ($value->status == "canceled") {
         return "Canceled";
@@ -420,13 +424,16 @@ function orderTotal($status, $data = false)
             $totalorders = MainOrders::where("status", "=", $status)->get()->count();
         } elseif ($status == "pending") {
             $totalorders = MainOrders::where("status", "=", $status)->get()->count();
+        }
+        elseif ($status == "processing") {
+            $totalorders = MainOrders::where("status", "=", $status)->get()->count();
         } elseif ($status == "canceled") {
             $totalorders = MainOrders::where("status", "=", $status)->get()->count();
         } else {
             $totalorders = "Invalid order type";
         }
     } elseif ($data == true) {
-        if ($status == "delivered") {
+        if ($status == "processing") {
             $totalorders = MainOrders::where("status", "=", $status)->get();
             $totalorders->map(function ($data) {
                 return $data->orders;
@@ -436,6 +443,12 @@ function orderTotal($status, $data = false)
             $totalorders->map(function ($data) {
                 return $data->orders;
             });
+        }
+        elseif ($status == "delivered") {
+            $totalorders = MainOrders::where("status", "=", $status)->get();
+            $totalorders->map(function ($data) {
+                return $data->orders;
+            });
         } elseif ($status == "canceled") {
             $totalorders = MainOrders::where("status", "=", $status)->get();
             $totalorders->map(function ($data) {
@@ -444,7 +457,8 @@ function orderTotal($status, $data = false)
         } else {
             $totalorders = "Invalid order type";
         }
-    } else {
+    }
+    else {
         $totalorders = "Invalid count argument";
     }
     return $totalorders;
@@ -608,16 +622,16 @@ function genarateReport($id, $type)
     $store = vendors::where("id", "=", $id)->get();
 
     $html = '
-    
+
     <!DOCTYPE html>
     <html lang="en">
-    
+
     <head>
         <meta charset="utf-8">
         <title>Payment report</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    
+
     <body>
         <div class="container" style="font-family: arial;">
             <div class="row">
@@ -716,15 +730,15 @@ function genarateReport($id, $type)
             </div>
         </div>
     </body>
-    
+
     <style>
         table, th, td {
       border: 1px solid black;border-collapse: collapse;
     }
     </style>
-        
+
     </html>
-    
+
     ';
 
     $reportname = str_replace(' ', '-', str_replace('.', '-', $store[0]->store_name)) . '-Report-' . date('d-m-Y') . '-' . rand(0, 99999) . '.pdf';
@@ -741,7 +755,7 @@ function generateInvioce($id)
     $orders = MainOrders::where("id", "=", $id)->get();
 
     $html = '
-    
+
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -798,7 +812,7 @@ function generateInvioce($id)
                     </div>
             </body>
             </html>
-        
+
             ';
 
     $reportname = str_replace(' ', '-', str_replace('.', '-', $orders[0]->order_number)) . '-Invoice-' . date('d-m-Y') . '-' . rand(0, 99999) . '.pdf';

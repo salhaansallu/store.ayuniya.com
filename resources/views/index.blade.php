@@ -13,7 +13,7 @@
         <div class="category_head">Top Categories</div>
         <ul>
             @isset($categories)
-    
+
             @foreach ($categories as $category)
             <li><a class="main_cat" data-bs-toggle="collapse" href="#{{ str_replace(' ', '_', $category->category_name) }}" role="button" aria-expanded="false" aria-controls="{{ $category->category_name }}"> <span>{{ $category->category_name }}</span> <span><i class="fa-solid fa-angle-right"></i></span></a>
                 <div class="collapse" id="{{ str_replace(' ', '_', $category->category_name) }}">
@@ -27,7 +27,7 @@
                 </div>
             </li>
             @endforeach
-                
+
             @endisset
         </ul>
     </div>
@@ -78,7 +78,7 @@
                 <i class="fa fa-angle-right"></i>
             </div>
         </div>
-        
+
         <div class="product_header">
             <h4>On Sale</h4>
         </div>
@@ -105,9 +105,9 @@
                         </div>
                     </div>
                 </div>
-                    
+
                 @endforeach
-                
+
             </div>
         </div>
         <div class="all_products">
@@ -145,7 +145,7 @@
     <div class="banner container d-none">
         <div class="inner-banner"></div>
     </div>
-    
+
     @if (isset($_GET['pid']))
 
     <script>
@@ -185,7 +185,7 @@
                     </div>
                     <h4>Thank you for your purchase !</h4>
                     <p>Your order ID : <span>{{ sanitize($_GET['pid']) }}</span></p>
-                    <p>Please make sure you have the payment when the order is received</p>
+                    <p>@if(sanitize($_GET["_region"])=="Sri Lanka") Please make sure you have the payment when the order is received @else Our sales team will contact you shortly @endif </p>
                     <div class="btn">
                         <a href="/account/orders">Order details</a>
                     </div>

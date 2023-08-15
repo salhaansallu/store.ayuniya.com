@@ -10,7 +10,7 @@ class StockController extends Controller
     {
         $leastAvailableStocks = Stock::orderBy('qty')->take(10)
         ->select('pro_id')
-        ->get(); 
+        ->get();
 
         return response()->json($leastAvailableStocks);
     }

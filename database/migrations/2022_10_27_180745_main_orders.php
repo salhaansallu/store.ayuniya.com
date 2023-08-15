@@ -23,6 +23,10 @@ return new class extends Migration
             $table->string("print")->default("");
             $table->double("delivery_charge", 12, 2);
             $table->double("total_order", 12, 2);
+            $table->text("courier_name")->default("");
+            $table->string("hand_over_date")->default("");
+            $table->string("track_code")->default("");
+            $table->string("track_link")->default("");
             $table->timestamps();
         });
     }

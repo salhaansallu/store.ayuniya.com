@@ -11,6 +11,7 @@ use App\Http\Controllers\index;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\product;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\User;
 use App\Http\Controllers\VendorPaymentsController;
@@ -82,6 +83,7 @@ Route::post('/create-subcategory', [SubCategoriesController::class, 'addCategory
 Route::post('/delete-subcategory', [SubCategoriesController::class, 'deleteCategory']);
 Route::post('/get-order', [OrdersController::class, 'getOrder']);
 Route::post('/delete-order', [OrdersController::class, 'deleteOrder']);
+Route::post('/update-status/{courier_name}/{track_code}/{track_link}', [OrdersController::class, 'updateOrder']);
 Route::post('/update-status', [OrdersController::class, 'updateOrder']);
 Route::post('/vendor-register', [VendorPaymentsController::class, 'registerVendor']);
 Route::post('/vendor-pay', [VendorPaymentsController::class, 'payVendor']);
@@ -113,6 +115,6 @@ Route::get('/print-orders', [OrdersController::class, 'printingOrders']);
 Route::post('/print-orders', [OrdersController::class, 'printOrders']);
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');

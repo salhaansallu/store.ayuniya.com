@@ -106,6 +106,7 @@ class checkout extends Controller
                                 "error" => 0,
                                 "msg" => "confirmed",
                                 "orderno" => $orderno,
+                                "region" => $country
                             );
                         } else {
                             $response = array(
@@ -180,6 +181,7 @@ class checkout extends Controller
                             "error" => 0,
                             "msg" => "confirmed",
                             "orderno" => $orderno,
+                            "region" => $country
                         );
                     }
                 }

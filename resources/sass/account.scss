@@ -304,6 +304,10 @@
                             .pending {
                                 background-color: rgb(255, 252, 68);
                             }
+
+                            .processing {
+                                background-color: rgb(255, 252, 68);
+                            }
                             .canceled {
                                 background-color: rgba(253, 34, 34, 0.774);
                             }
@@ -314,3 +318,5 @@
         }
     }
 }
+
+

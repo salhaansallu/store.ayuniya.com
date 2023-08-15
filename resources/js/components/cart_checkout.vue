@@ -24,7 +24,7 @@ export default {
             .then(function (response) {
                 document.cookie = "order_confirmed=false; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                 if (response.data.error==0) {
-                    location.href="/?pid="+response.data.orderno;
+                    location.href="/?pid="+response.data.orderno+"&_region="+response.data.region;
                 }
                 else if (response.data.error==1){
                     toastr.error(response.data.msg, "Error");
