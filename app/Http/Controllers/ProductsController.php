@@ -93,18 +93,18 @@ class ProductsController extends Controller
 
     public function admin()
     {
-        if (isAdmin()) {
+        if (isAdmin()||  isAccountManager()) {
             if (isset($_GET['edit'])) {
                 $products = products::orderBy("id", "DESC")->paginate(25);
                 $products->map(function ($subvarient) {
                     return $subvarient->varient;
                 });
-    
+
                 $editproducts = products::where("id", "=", sanitize($_GET['edit']))->get();
                 $editproducts->map(function ($subvarient) {
                     return $subvarient->varient;
                 });
-    
+
                 return view('dashboard.views.products')->with(['css' => 'products.scss', 'products' => $products, 'editproducts' => $editproducts]);
             } else {
                 $products = products::orderBy("id", "DESC")->paginate(25);
@@ -288,13 +288,13 @@ class ProductsController extends Controller
                             "weight" => sanitize($request->input('weight' . $i)),
                             "status" => sanitize($request->input('active' . $i)),
                         ]);
-                        
+
                         $response = array(
                             "error" => 0,
                             "msg" => "Product updated successfully"
                         );
                     }
-                    
+
                 } else {
                     $response = array(
                         "error" => 1,

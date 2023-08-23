@@ -32,6 +32,7 @@
                         <li><a href="/web-admin/categories"><i class="fa-solid fa-table-cells"></i> Categories</a></li>
                         <li><a href="/web-admin/sub-categories"><i class="fa-solid fa-table-cells"></i> Sub categories</a></li>
                         <li><a href="/web-admin/products"><i class="fa-solid fa-basket-shopping"></i> Products</a></li>
+                        <li><a href="/web-admin/contacts"><i class="fa-solid fa-message"></i> Contact Us</a></li>
                         <li><a href="/web-admin/orders"><i class="fa-solid fa-truck"></i> Orders ({{ orderTotal("pending") }})</a></li>
                         <li><a href="/web-admin/vendor-register"><i class="fa-solid fa-store"></i> Vendor register</a></li>
                         <li><a href="/web-admin/vendors"><i class="fa-solid fa-store"></i> Vendors</a></li>
@@ -90,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col">
                             <div class="inner">
                                 <div class="image">

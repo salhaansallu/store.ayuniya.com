@@ -15,6 +15,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\User;
 use App\Http\Controllers\VendorPaymentsController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -37,7 +38,9 @@ Route::get('/stocks/least-available', [StockController::class, 'getLeastAvailabl
 Route::get('/about-us', function () {
     Session::put('redirectAfterLogin', '/about-us');
     $app_name = config('app.name');
-    return view('about')->with(['title'=>'About us | '.$app_name, 'css' => 'about.scss']);
+    return view('about',)->with(['title'=>'About us | '.$app_name, 'css' => 'about.scss',]);
+
+
 });
 
 Route::get('/services', function () {
@@ -63,6 +66,8 @@ Route::post('/checkout', [checkout::class, 'buyNow']);
 Route::post('/get-total', [checkout::class, 'getTotal']);
 Route::post('/confirm-checkout', [checkout::class, 'confirmCheckout']);
 
+Route::post('/about-us', [ContactController::class, 'saveContact'])->name('saveContactus');
+
 Route::post('/product/{sku}', [product::class, 'varient']);
 
 Auth::routes();
@@ -87,7 +92,8 @@ Route::post('/update-status/{courier_name}/{track_code}/{track_link}', [OrdersCo
 Route::post('/update-status', [OrdersController::class, 'updateOrder']);
 Route::post('/vendor-register', [VendorPaymentsController::class, 'registerVendor']);
 Route::post('/vendor-pay', [VendorPaymentsController::class, 'payVendor']);
-Route::post('/delete-user', [User::class, 'delete']);
+Route::post('/delete-user', [Contact::class, 'delete']);
+Route::post('/delete-contact', [ContactController::class, 'delete']);
 Route::post('/book', [AppoinmentController::class, 'book']);
 Route::post('/create-product', [ProductsController::class, 'store']);
 Route::post('/update-product', [ProductsController::class, 'update']);
@@ -101,6 +107,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Admin dashboard
 Route::get('/web-admin', [Admin::class, 'index']);
 Route::get('/web-admin/categories', [CategoriesController::class, 'index']);
+Route::get('/web-admin/contacts', [ContactController::class, 'index']);
 Route::get('/web-admin/sub-categories', [SubCategoriesController::class, 'index']);
 Route::get('/web-admin/products', [ProductsController::class, 'admin']);
 Route::get('/web-admin/orders', [OrdersController::class, 'index']);
