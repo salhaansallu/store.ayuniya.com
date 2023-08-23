@@ -21,7 +21,7 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        if (isAdmin()) {
+        if (isAdmin() || isOrderManager() ||isCustomerCareManager())  {
             return view("dashboard.views.orders")->with(['css' => 'orders.scss']);
         } else {
             return redirect(route('login'));

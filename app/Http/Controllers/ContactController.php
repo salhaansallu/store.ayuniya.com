@@ -34,7 +34,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        if (isAdmin()) {
+        if (isAdmin()|| isCustomerCareManager()) {
             $contact = contact::get();
             return view('dashboard.views.contact')->with(['css' => 'user.scss', 'contact' => $contact]);
         } else {

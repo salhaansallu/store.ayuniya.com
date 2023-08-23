@@ -825,10 +825,12 @@ function generateInvioce($id)
     return asset('invoice/' . $reportname);
 }
 
+
+
 function isAdmin()
 {
     if (Auth::check()) {
-        if (Auth::user()->is_verified == "admin") {
+        if (Auth::user()->is_verified == "admin" ) {
             return true;
         } else {
             return false;
@@ -838,10 +840,37 @@ function isAdmin()
     }
 }
 
+function isCustomerCareManager()
+{
+    if (Auth::check()) {
+        if (Auth::user()->is_verified == "cus" ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+
 function isOrderManager()
 {
     if (Auth::check()) {
         if (Auth::user()->is_verified == "orders") {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function isAccountManager()
+{
+    if (Auth::check()) {
+        if (Auth::user()->is_verified == "sales") {
             return true;
         } else {
             return false;
