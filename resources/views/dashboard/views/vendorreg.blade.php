@@ -20,7 +20,7 @@
 
 <div class="vendor_form">
     <div class="header">
-        <h1>Vendor registor</h1>
+        <h1>Manufacturer register</h1>
     </div>
     <form action="" onsubmit="return false;" method="post" id="vendorRegister">
         @csrf
@@ -33,7 +33,7 @@
                     <input type="text" name="name" id="name" placeholder="Enter company name" required>
                 </div>
             </div>
-    
+
             <div class="input">
                 <div class="label">Company email</div>
                 <div class="txt_field">
