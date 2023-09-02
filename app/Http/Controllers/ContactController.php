@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
-use App\Models\contact;
+use App\Models\Contact;
 
 use Illuminate\Http\Request;
 
@@ -11,7 +11,7 @@ class ContactController extends Controller
 {
     public function saveContact(ContactRequest $request)
     {
-        $appObj = new contact();
+        $appObj = new Contact();
 
 
         $appObj->name = $request->name;

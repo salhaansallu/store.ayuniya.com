@@ -21,7 +21,7 @@ class checkout extends Controller
     {
         redirectCookie();
         if (Auth::check()) {
-            $products = DB::select("select * from varients,carts,products where carts.product_id=varients.sku and varients.pro_id=products.id");
+            $products = DB::select("select * from varients,carts,products where carts.product_id=varients.sku and varients.pro_id=products.id and carts.user_id=".Auth::user()->id);
             if (count($products) > 0) {
                 return view('checkout')->with(['title' => 'Checkout | ' . config('app.name'), 'css' => 'checkout.scss', 'products' => $products]);
             } else {

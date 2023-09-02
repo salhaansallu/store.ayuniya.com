@@ -9,7 +9,7 @@
 </style>
 
 <div class="top_nav">
-    <div class="bread_crumb">Dashboard > <span>Vendors</span></div>
+    <div class="bread_crumb">Dashboard > <span>Manufacturers</span></div>
     <div class="create"><button class="secondary_btn" type="button" onclick="location.href='/web-admin/vendor-register';"><i class="fa-solid fa-plus"></i> Add new</button></div>
 </div>
 
