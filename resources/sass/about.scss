@@ -1,0 +1,513 @@
+// Variables
+@import 'variables';
+
+.carousel {
+    .bg {
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 500px;
+        margin-top: -25px;
+        border-radius: 10px;
+
+        @media only screen and (max-width: 768px){
+            height: 450px;
+        }
+    }
+}
+
+.services {
+    .about-header {
+        text-align: center;
+        margin-top: 20px;
+
+        &::before {
+            content: 'Services';
+            font-family: 'arial';
+            font-size: 70px;
+            font-weight: bold;
+            color: rgb(243, 243, 243);
+
+            @media only screen and (max-width: 989px){
+                font-size: 50px;
+            }
+        }
+
+        h1 {
+            font-size: 40px;
+            font-family: 'maian';
+            color: var(--primary--);
+            margin-top: -55px;
+
+            @media only screen and (max-width: 989px){
+                font-size: 30px;
+                margin-top: -40px;
+            }
+        }
+    }
+
+    .row {
+        justify-content: center;
+        margin-top: 70px;
+        width: 100%;
+
+        .col {
+            width: 350px;
+            background-color: #fff;
+            box-shadow: rgb(214, 214, 214) 0px 0px 15px 0px;
+            padding: 30px;
+            text-align: center;
+            margin-right: 250px;
+
+
+            @media only screen and (max-width: 989px){
+                margin-right: 50px;
+            }
+
+            @media only screen and (max-width: 700px){
+                margin-right: 0px;
+                margin-bottom: 20px;
+            }
+
+            &:nth-child(2) {
+                margin-right: 0;
+            }
+
+            .image {
+                img {
+                    border: rgb(201, 201, 201) 1px solid;
+                    border-radius: 50%;
+                }
+            }
+
+            .name {
+                text-align: left;
+                margin-top: 10px;
+                color: var(--primary--);
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .text {
+                text-align: left;
+                font-size: 16px;
+                font-weight: bold;
+                color: rgb(175, 175, 175);
+            }
+        }
+    }
+}
+
+.about_ctnt {
+    margin-top: 200px;
+
+    @media only screen and (max-width: 700px){
+        margin-top: 70px;
+    }
+
+    .row {
+        justify-content: center;
+        width: 100%;
+
+        .col {
+            width: max-content;
+            margin-right: 100px;
+
+            @media only screen and (max-width: 989px){
+                margin-right: 0;
+            }
+
+            &:nth-child(2) {
+                margin-right: 0;
+            }
+
+            .content {
+                width: 550px;
+
+                @media only screen and (max-width: 530px){
+                    width: 90%;
+                    margin: auto;
+                }
+
+                .head {
+                    font-family: 'lucida';
+                    font-size: 30px;
+
+                    @media only screen and (max-width: 530px){
+                        font-size: 25px;
+                    }
+                }
+
+                .sub {
+                    color: rgb(151, 151, 151);
+                    font-size: 18px;
+                    margin-top: 10px;
+                }
+
+                .learn_more {
+                    margin-top: 20px;
+
+                    a {
+                        background-color: var(--primary--);
+                        color: #fff;
+                        font-size: 16px;
+                        text-decoration: none;
+                        padding: 10px;
+                        padding-left: 20px;
+                        padding-right: 20px;
+                        margin-top: 20px;
+                        font-family: 'lucida';
+                        border-radius: 20px;
+                    }
+                }
+            }
+
+            img {
+                width: 350px;
+                margin-top: -45px;
+
+                @media only screen and (max-width: 768px){
+                    margin-top: 30px;
+                }
+
+                @media only screen and (max-width: 530px){
+                    width: 70%;
+                }
+            }
+        }
+    }
+}
+
+.banner {
+    margin-top: 100px;
+
+    img {
+        height: 400px;
+        width: 70%;
+
+        @media only screen and (max-width: 989px){
+            width: 100%;
+        }
+
+        @media only screen and (max-width: 425px){
+            height: 250px;
+        }
+    }
+
+    .caption {
+        font-family: 'arial';
+        font-size: 35px;
+        color: #fff;
+        font-weight: bold;
+        position: absolute;
+        margin-top: -350px;
+        width: 30%;
+        line-height: 40px;
+        margin-left: 200px;
+
+        @media only screen and (max-width: 1520px){
+            width: 60%;
+            margin-left: 20px;
+            margin-top: -320px;
+        }
+
+        @media only screen and (max-width: 989px){
+           width: 50%;
+           margin-top: -360px;
+        }
+
+        @media only screen and (max-width: 989px){
+            font-size: 25px;
+            margin-left: 50px;
+            width: 60%;
+        }
+
+        @media only screen and (max-width: 530px){
+            font-size: 25px;
+            width: 90%;
+            margin-left: 20px;
+        }
+
+        @media only screen and (max-width: 425px){
+            font-size: 20px;
+            line-height: 25px;
+            margin-top: -240px;
+        }
+
+        .sub {
+            font-size: 20px;
+            line-height: 25px;
+            margin-top: 20px;
+
+            @media only screen and (max-width: 989px){
+                font-size: 18px;
+            }
+
+            @media only screen and (max-width: 500px){
+                font-size: 15px;
+            }
+
+            @media only screen and (max-width: 425px){
+                font-size: 14px;
+                margin-top: 10px;
+            }
+        }
+
+        .shop_now {
+            margin-top: 20px;
+
+            a {
+                background-color: var(--primary--);
+                color: #fff;
+                font-size: 22px;
+                text-decoration: none;
+                padding: 7px;
+                padding-left: 25px;
+                padding-right: 25px;
+                border-radius: 20px;
+
+                @media only screen and (max-width: 425px){
+                    font-size: 16px;
+                }
+            }
+
+            @media only screen and (max-width: 425px){
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+.testimonial {
+    margin-top: 50px;
+
+    .about-header {
+        text-align: center;
+        margin-top: 20px;
+
+        &::before {
+            content: 'Testimonials';
+            font-family: 'arial';
+            font-size: 70px;
+            font-weight: bold;
+            color: rgb(243, 243, 243);
+
+            @media only screen and (max-width: 989px){
+                font-size: 50px;
+            }
+        }
+
+        h1 {
+            font-size: 40px;
+            font-family: 'maian';
+            color: var(--primary--);
+            margin-top: -55px;
+
+            @media only screen and (max-width: 989px){
+                font-size: 30px;
+                margin-top: -40px;
+            }
+        }
+    }
+
+    .row {
+        justify-content: space-around;
+        margin-top: 50px;
+        width: 100%;
+
+        .col {
+            width: 350px;
+            padding: 20px;
+            display: flex;
+            border: var(--primary--) 1px solid;
+            margin-bottom: 20px;
+
+            @media only screen and (max-width: 989px){
+                font-size: 50px;
+            }
+
+            @media only screen and (max-width: 425px){
+                width: 300px;
+            }
+
+            .qoute {
+                margin-right: 10px;
+
+                i {
+                    font-size: 50px;
+                }
+            }
+
+            .say {
+                font-size: 15px;
+                color: rgb(163, 163, 163);
+                font-weight: bold;
+
+                @media only screen and (max-width: 425px){
+                    font-size: 15px;
+                }
+
+                .commenter {
+                    color: var(--primary--);
+                    font-size: 17px;
+
+                    @media only screen and (max-width: 425px){
+                        font-size: 17px;
+                    }
+                }
+
+                .company {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+
+.stay_in_touch {
+    margin-top: 50px;
+
+    .about-header {
+        text-align: center;
+        margin-top: 20px;
+
+        &::before {
+            content: 'Contact Us';
+            font-family: 'arial';
+            font-size: 70px;
+            font-weight: bold;
+            color: rgb(243, 243, 243);
+
+            @media only screen and (max-width: 989px){
+                font-size: 50px;
+            }
+        }
+
+        h1 {
+            font-size: 40px;
+            font-family: 'maian';
+            color: var(--primary--);
+            margin-top: -55px;
+
+            @media only screen and (max-width: 989px){
+                font-size: 30px;
+                margin-top: -40px;
+            }
+        }
+    }
+
+    .row {
+        margin-top: 50px;
+        justify-content: center;
+        width: 100%;
+
+        .col {
+            width: max-content;
+            margin-right: 100px;
+
+            @media only screen and (max-width: 989px){
+                margin-right: 50px;
+                margin-bottom: 30px;
+            }
+
+            @media only screen and (max-width: 425px){
+                margin-right: 0;
+            }
+
+            &:nth-child(2){
+                margin-right: 0;
+            }
+
+            .icon{
+                text-align: center;
+
+                i{
+                    font-size: 45px;
+                    color: var(--primary--);
+                }
+            }
+
+            .header{
+                text-align: center;
+                font-size: 20px;
+                font-weight: bold;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+
+            .sub{
+                font-size: 16px;
+                font-weight: bold;
+                color: rgb(145, 145, 145);
+                margin-bottom: 20px;
+            }
+
+            .dtls{
+                .email{
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+
+                    span{
+                        color: var(--primary--);
+                    }
+                }
+            }
+
+            form {
+                width: 400px;
+                background-color: #fff;
+                box-shadow: rgb(201, 201, 201) 0px 0px 15px 0px;
+                padding: 30px;
+                border-radius: 10px;
+                padding-top: 10px;
+
+                @media only screen and (max-width: 425px){
+                    width: 350px;
+                }
+
+                @media only screen and (max-width: 425px){
+                    width: 300px;
+                }
+
+                .head{
+                    font-size: 18px;
+                    font-weight: bold;
+                    padding-bottom: 5px;
+                    border-bottom: rgb(190, 190, 190) 1px solid;
+                }
+
+                .txt_field {
+                    margin-top: 10px;
+                    .label{
+                        font-size: 14px;
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-weight: bold;
+                        color: rgb(44, 44, 44);
+                    }
+
+                    .input {
+                        margin-top: 0;
+
+                        input,
+                        textarea {
+                            width: 350px;
+                            border: rgb(219, 219, 219) 1px solid;
+                            outline: none;
+                            background-color: rgb(248, 248, 248);
+                            padding: 3px;
+                            padding-left: 10px;
+                            border-radius: 3px;
+                            padding-top: 0;
+
+                            @media only screen and (max-width: 460px) {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

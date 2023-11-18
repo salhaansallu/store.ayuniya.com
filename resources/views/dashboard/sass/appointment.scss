@@ -1,0 +1,83 @@
+@import 'variable';
+
+.top_nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: rgb(192, 192, 192) 1px solid;
+
+    .bread_crumb {
+        color: rgb(32, 32, 32);
+        font-size: 20px;
+        font-weight: bold;
+
+        span {
+            color: rgb(151, 151, 151);
+        }
+    }
+}
+
+.categories {
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+
+    .inner {
+        background-color: #fff;
+        padding: 20px;
+
+        table {
+            width: 100%;
+
+            thead {
+                tr {
+                    border-bottom: rgb(192, 192, 192) 1px solid;
+
+                    td {
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        font-size: 15px;
+                        font-weight: bold;
+                        border-bottom: rgb(192, 192, 192) 1px solid;
+                        padding-top: 15px;
+                        padding-bottom: 15px;
+
+                        img{
+                            margin-right: 20px;
+                        }
+
+                        button {
+                            border: none;
+                            outline: none;
+                            background-color: transparent;
+                            margin-right: 10px;
+                            font-size: 17px;
+                            font-weight: bold;
+                            color: #fff;
+                            padding: 5px;
+                            padding-left: 25px;
+                            padding-right: 25px;
+
+                            &:nth-child(1){
+                                background-color: $secondary;
+                            }
+
+                            &:nth-child(2){
+                                background-color: rgb(223, 0, 0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

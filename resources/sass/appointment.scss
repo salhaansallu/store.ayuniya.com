@@ -1,0 +1,92 @@
+// Variables
+@import 'variables';
+
+.appointment {
+    background-color: #fff;
+    width: 70%;
+    padding: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: #c7c7c794 0px 0px 15px 0px;
+    margin-bottom: 50px;
+
+    @media only screen and (max-width: 450px) {
+        width: 90%;
+    }
+
+    .head {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        color: var(--primary--);
+        font-weight: bold;
+    }
+
+    .data_row {
+        display: flex;
+        border-top: rgb(211, 211, 211) 1px solid;
+        width: 100%;
+        margin-left: 0;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        overflow: auto;
+
+        /* width */
+        &::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgb(134, 134, 134);
+        }
+
+        .col {
+            border: var(--primary--) 1px solid;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            min-width: 130px;
+            margin-left: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
+
+            &:nth-child(1) {
+                margin-left: 0;
+            }
+
+            .data {
+                color: #989898;
+
+                span {
+                    color: #000;
+                }
+            }
+
+            .book_btn {
+                button {
+                    color: #fff;
+                    font-weight: bold;
+                    background-color: var(--primary--);
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                    margin-top: 10px;
+                    border-radius: 5px;
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                }
+            }
+        }
+    }
+}

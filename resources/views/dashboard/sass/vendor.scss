@@ -1,0 +1,121 @@
+@import 'variable';
+
+.vendor_form {
+    width: 700px;
+    background-color: #fff;
+    padding: 50px;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    @media only screen and (max-width: 426px) {
+        width: 350px;
+        padding: 20px;
+    }
+
+    @media only screen and (max-width: 355px) {
+        width: 300px;
+    }
+
+    .d-flex {
+        .check{
+            margin-left: 30px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .input {
+            flex: 50%;
+            margin-right: 30px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .header {
+        text-align: center;
+
+        h1 {
+            font-family: $rockwell;
+            color: $primary;
+            font-weight: bold;
+        }
+    }
+}
+
+form {
+
+    fieldset {
+        border: #9e9e9e 1px solid;
+        padding: 20px;
+    }
+
+    .input {
+        margin-top: 30px;
+
+        .label {
+            color: #717171;
+            font-weight: bold;
+            font-size: 17px;
+
+            span {
+                color: rgb(255, 0, 0);
+                font-size: 15px;
+            }
+        }
+
+        .passreset {
+            position: absolute;
+            margin-left: 202px;
+            margin-top: -19px;
+            color: #797979;
+
+            @media only screen and (max-width: 426px) {
+                margin-left: 148px;
+            }
+
+            @media only screen and (max-width: 355px) {
+                margin-left: 100px;
+            }
+
+            a {
+                text-decoration: none;
+                font-weight: bold;
+            }
+        }
+
+        .txt_field {
+            margin-top: 5px;
+
+            input {
+                width: 100%;
+                border: #D5D5D5 0.5px solid;
+                padding: 5px;
+                font-size: 15px;
+                outline: none;
+
+                &::placeholder {
+                    color: #D5D5D5;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .vendor_register {
+        margin-top: 20px;
+
+        button {
+            color: #fff;
+            background-color: $primary;
+            font-weight: bold;
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+    }
+}

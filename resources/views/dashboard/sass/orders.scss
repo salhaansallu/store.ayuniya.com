@@ -1,0 +1,181 @@
+@import 'variable';
+
+.top_nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: rgb(192, 192, 192) 1px solid;
+
+    .bread_crumb {
+        color: rgb(32, 32, 32);
+        font-size: 20px;
+        font-weight: bold;
+
+        span {
+            color: rgb(151, 151, 151);
+        }
+    }
+}
+
+.categories {
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+
+    .inner {
+        background-color: #fff;
+        padding: 20px;
+
+        table {
+            width: 100%;
+
+            thead {
+                tr {
+                    border-bottom: rgb(192, 192, 192) 1px solid;
+
+                    td {
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        font-size: 15px;
+                        font-weight: bold;
+                        border-bottom: rgb(192, 192, 192) 1px solid;
+                        padding-top: 15px;
+                        padding-bottom: 15px;
+
+                        &:nth-child(1){
+                            cursor: pointer;
+                        }
+
+                        button {
+                            border: none;
+                            outline: none;
+                            background-color: transparent;
+                            margin-right: 10px;
+                            font-size: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+.modal-dialog{
+    max-width: max-content !important;
+    width: max-content !important;
+}
+.modal-content{
+    width: 1000px !important;
+}
+
+
+.modal-body {
+    .head {
+        font-size: 20px;
+        font-weight: bold;
+        border-bottom: rgb(180, 180, 180) 1px solid;
+        margin-bottom: 20px;
+    }
+
+    .user_details{
+        display: flex;
+        justify-content: left;
+
+        .c_details{
+            width: 300px;
+            margin-right: 50px;
+
+            .name{
+                font-weight: bold;
+                color: rgb(148, 148, 148);
+                font-size: 16px;
+
+                span{
+                    color: rgb(36, 36, 36);
+                }
+            }
+        }
+    }
+
+    .products{
+
+        table{
+            width: 100%;
+
+            tr{
+
+                th{
+                    border-top: rgb(175, 175, 175) 1px solid;
+                    border-bottom: rgb(175, 175, 175) 1px solid;
+                    padding: 10px;
+                    margin-bottom: 5px;
+
+                    button{
+                        border: none;
+                        outline: none;
+                        color: #fff;
+                        font-weight: bold;
+                        padding: 5px;
+                        padding-left: 15px;
+                        padding-right: 15px;
+
+                        &.red{
+                            background-color: rgb(230, 2, 2);
+                            margin-right: 10px;
+                        }
+
+                        &.green{
+                            background-color: $secondary;
+                        }
+                    }
+                }
+                
+                td{
+                    background-color: rgb(241, 241, 241);
+                    padding: 10px;
+                    color: rgb(36, 35, 35);
+                    font-weight: bold;
+                    border-bottom: #fff 5px solid;
+
+                    .pro_details{
+                        display: flex;
+
+                        .img{
+                            margin-right: 20px;
+                            img{
+                                width: 80px;
+                            }
+                        }
+
+                        .pro_name{
+                            .name{
+                                font-size: 17px;
+                                font-weight: bold;
+                                color: rgb(34, 34, 34);
+                            }
+                            
+                            .cat,.sku,.variant{
+                                color: rgb(143, 143, 143);
+                                font-size: 15px;
+                                font-weight: normal;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
