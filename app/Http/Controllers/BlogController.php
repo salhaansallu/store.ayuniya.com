@@ -17,6 +17,11 @@ class BlogController extends Controller
         return view('bloglist')->with(['title' => 'Blogs | Ayuniya | ayuniya.com', 'css' => 'blog.scss']);
     }
 
+    public function getBlog()
+    {
+        return view('blog')->with(['title' => 'Blogs | Ayuniya | ayuniya.com', 'css' => 'blog.scss']);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

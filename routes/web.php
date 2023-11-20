@@ -53,6 +53,7 @@ Route::get('/services', function () {
 })->name('adbooking1');
 
 Route::get('/blog', [BlogController::class, 'index']);
+Route::get('/blog/{id}', [BlogController::class, 'getBlog']);
 Route::get('/cart', [CartController::class, 'index']);
 Route::get('/appointment', [AppoinmentController::class, 'index']);
 Route::get('/shop', [ProductsController::class, 'index']);
