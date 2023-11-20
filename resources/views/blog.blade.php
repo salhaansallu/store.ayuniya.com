@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row blog-container m-0">
+    <div class="row blog-container blog-details">
         <div class="col-12 col-xxl-8 col-xl-8">
             <div class="main_img">
                 <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
