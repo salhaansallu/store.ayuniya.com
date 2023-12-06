@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class blog extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'blog_image',
+        'blog_Title',
+        'blog_dis'
+
+    ];
 }

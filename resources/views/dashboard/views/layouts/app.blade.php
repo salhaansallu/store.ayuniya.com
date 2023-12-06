@@ -44,6 +44,7 @@
                         </li>
                         <li><a href="/web-admin/vendors"><i class="fa-solid fa-store"></i> Manufacturers</a></li>
                         <li><a href="/web-admin/payments"><i class="fa-solid fa-sack-dollar"></i> Payments</a></li>
+                        <li><a href="/web-admin/blogs"><i class="fa-solid fa-pen-nib"></i> Blog Posts</a></li>
                         <li><a href="/web-admin/appointment"><i class="fa-solid fa-clipboard-check"></i> Appointments
                                 ({{ appointments(date('Y-m-d'), date('Y-m-d', strtotime('+365 days')), true) }})</a>
                         </li>

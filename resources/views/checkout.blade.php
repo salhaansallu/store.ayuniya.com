@@ -17,7 +17,7 @@
             }
 
             .navigate_btn {
-                background-color:var(--primary--);
+                background-color: var(--primary--);
                 color: #ffffff;
                 border: none;
                 padding: 10px 20px;
@@ -53,7 +53,8 @@
             }
 
             .all-steps {
-                text-align: center;;
+                text-align: center;
+                ;
 
             }
 
@@ -164,9 +165,14 @@
 
                         <div class="txt_field" id="addressCheckbox">
                             <input type="checkbox" id="addressCheckboxinput" name="address">
-                            <label class="labal" for="addressCheckbox" name="addressCheckbox"> Use My Shopping
+                            <label class="labal" for="addressCheckbox" name="addressCheckbox">Use My Shopping
                                 Address</label>
                             <br><br>OR
+                        </div>
+
+                        <!-- Add a message to display if the user has no existing address -->
+                        <div id="noAddressError" style="display: none; color: red;">
+                            You do not have an existing address. Please fill in the address fields.
                         </div>
                         <div class="txt_field">
                             <div class="label">Country <span>*</span></div>
@@ -209,9 +215,14 @@
 
 
                     <div style="overflow:auto;" id="nextprevious">
-                        <div style="float:right;"> <button class="navigate_btn" type="button" id="prevBtn"
-                                onclick="nextPrev(-1)">Previous</button> <button class="navigate_btn" type="button" id="nextBtn"
-                                onclick="nextPrev(1)">Next</button> </div>
+                        <div style="float:right;">
+                            <button class="navigate_btn" type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                            <button class="navigate_btn" type="button" id="nextBtn" onclick="location.href='/account/address-book'" alt="">Go</button>
+
+
+                        </div>
+
+
                     </div>
                 </form>
             @endif
@@ -2218,41 +2229,52 @@
 </script>
 
 <script>
-    $(document).ready(function() {
-        // Function to toggle the checkbox based on the response
-        function toggleCheckboxVisibility(addressExists) {
-            if (addressExists) {
-                $('#addressCheckbox').show();
-            } else {
-                $('#addressCheckbox').hide();
-            }
+    // Function to toggle the checkbox based on the response
+    function toggleCheckboxVisibility(addressExists) {
+        if (addressExists) {
+            $('#addressCheckbox').show();
+        } else {
+            $('#addressCheckbox').hide();
         }
+    }
 
-        // Make an AJAX request to check if the user's ID exists in the addresses table
-        $.ajax({
-            type: "get",
-            url: "/check-address",
-            dataType: "json",
-            success: function(response) {
-                if (response.addressExists) {
-                    toggleCheckboxVisibility(true);
-                } else {
-                    toggleCheckboxVisibility(false);
-                }
-            },
-            error: function() {
-                // Handle the error if the AJAX request fails
-                //console.error("Error checking user's address.");
+    // AJAX request to check if the user's address exists
+    $.ajax({
+        type: "get",
+        url: "/check-address",
+        dataType: "json",
+        success: function(response) {
+            if (response.addressExists) {
+                toggleCheckboxVisibility(true);
+            } else {
+                toggleCheckboxVisibility(false);
+                $('#noAddressError').show(); // Show the error message for no existing address
             }
-        });
+        },
+        error: function() {
+            // Handle the error if the AJAX request fails
+            console.error("Error checking user's address.");
+        }
+    });
 
-        // Listen for changes in the checkbox (optional)
-        $('#addressCheckbox').on('change', function() {
-            // Add your code to handle checkbox changes here
-        });
+    // Add an event listener for the checkbox to allow selecting only one option
+    $('#addressCheckboxinput').on('change', function() {
+        if ($(this).is(':checked')) {
+            // Hide other address fields when "Use My Shopping Address" is selected
+            $('.txt_field:not(#addressCheckbox)').hide();
+        } else {
+            // Show other address fields when unchecked
+            $('.txt_field:not(#addressCheckbox)').show();
+            $('#noAddressError').hide(); // Hide the error message if shown
+        }
+    });
+
+    // Add an event listener to handle form submission and data storage in the controller
+    $('#proceedToCheckoutBtn').on('click', function() {
+        // Collect data from form fields
+        // Perform validation and proceed to checkout or display error messages
     });
 </script>
-
 
 <script>
     //your javascript goes here
@@ -2273,9 +2295,11 @@
             document.getElementById("prevBtn").style.display = "inline";
         }
         if (n == (x.length - 1)) {
+
             document.getElementById("nextBtn").innerHTML = "Submit";
+
         } else {
-            document.getElementById("nextBtn").innerHTML = "Next";
+            document.getElementById("nextBtn").innerHTML = "Add Shipping Address";
         }
         fixStepIndicator(n)
     }
@@ -2323,5 +2347,81 @@
         }
         x[n].className += " active";
     }
+</script>
+<script>
+    // Update the AJAX success function for checking user address
+    $.ajax({
+        // ... your existing AJAX setup
+        success: function(response) {
+            if (response.addressExists) {
+                toggleCheckboxVisibility(true);
+            } else {
+                toggleCheckboxVisibility(false);
+                $('#noAddressError').show(); // Show the error message for no existing address
+            }
+        },
+        // ... other AJAX configurations
+    });
+
+    // Add an event listener for the checkbox to allow selecting only one option
+    $('#addressCheckboxinput').on('change', function() {
+        if ($(this).is(':checked')) {
+            // Hide other address fields when "Use My Shopping Address" is selected
+            $('.txt_field:not(#addressCheckbox)').hide();
+        } else {
+            // Show other address fields when unchecked
+            $('.txt_field:not(#addressCheckbox)').show();
+            $('#noAddressError').hide(); // Hide the error message if shown
+        }
+    });
+
+    // Add an event listener to handle form submission and data storage in the controller
+    $('#cartcheckout_btn .proceed').on('click', function() {
+        // Collect data from form fields
+        var address = $('#address1').val();
+        var postal = $('#postal').val();
+        var city = $('#city').val();
+        var country = $('#country').val();
+
+        // Add AJAX call to send the form data to the controller endpoint for storage
+        $.ajax({
+            type: 'post',
+            url: '/store-address', // Replace with your endpoint
+            data: {
+                address: address,
+                postal: postal,
+                city: city,
+                country: country,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Redirect to /confirm-checkout route upon successful address storage
+                    window.location.href = '/confirm-checkout';
+                } else {
+                    // Handle errors or display messages accordingly
+                    alert('Failed to store address. Please try again.');
+                }
+            }
+        });
+    });
+</script>
+<script>
+    $("#shippingaddressform").submit(function() {
+        $.ajax({
+            type: "post",
+            url: "/account-update",
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function(data) {
+                if (data.error == 0) {
+                    toastr.success(data.msg, "Success");
+                } else {
+                    toastr.error(data.msg, "Error");
+                }
+            }
+        });
+    });
 </script>
 @endsection

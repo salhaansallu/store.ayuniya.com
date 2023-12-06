@@ -48,7 +48,7 @@ class checkout extends Controller
     }
 
 
-    
+
 
 
     public function buyNow(Request $request)

@@ -112,6 +112,9 @@ Route::post('/update-product', [ProductsController::class, 'update']);
 Route::get('/web-admin/Preoders', [PreorderController::class, 'index']);
 Route::post('/delete-product', [ProductsController::class, 'delete']);
 Route::post('/delete-varient', [ProductsController::class, 'deleteVarient']);
+Route::post('/create-blogs', [BlogController::class, 'store']);
+Route::post('/delete-blogs', [BlogController::class, 'delete']);
+Route::post('/update-blogs', [BlogController::class, 'update']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -123,6 +126,7 @@ Route::get('/web-admin/categories', [CategoriesController::class, 'index']);
 Route::get('/web-admin/contacts', [ContactController::class, 'index']);
 Route::get('/web-admin/sub-categories', [SubCategoriesController::class, 'index']);
 Route::get('/web-admin/products', [ProductsController::class, 'admin']);
+Route::get('/web-admin/blogs', [BlogController::class, 'admin']);
 Route::get('/web-admin/orders', [OrdersController::class, 'index']);
 Route::get('/web-admin/appointment', [AppoinmentController::class, 'admin']);
 Route::get('/web-admin/users', [User::class, 'index']);

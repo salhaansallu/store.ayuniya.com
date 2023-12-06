@@ -30,6 +30,7 @@ export default defineConfig({
                 'resources/views/dashboard/sass/user.scss',
                 'resources/views/dashboard/sass/variable.scss',
                 'resources/views/dashboard/sass/vendor.scss',
+                'resources/views/dashboard/sass/blogs.scss',
 
                 'resources/js/app.js',
                 'resources/js/custom.js',
