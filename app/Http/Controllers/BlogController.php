@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\BlogRequest;
 use App\Models\blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class BlogController extends Controller
 {
@@ -14,14 +15,28 @@ class BlogController extends Controller
      */
     public function index()
     {
-        return view('bloglist')->with(['title' => 'Blogs | Ayuniya | ayuniya.com', 'css' => 'blog.scss']);
+        // Fetch all blog posts from the database
+        $blogs = Blog::orderBy('created_at', 'desc')->get(); // Retrieve blogs ordered by creation date
+
+        return view('bloglist', [
+            'title' => 'Blogs | Ayuniya | ayuniya.com',
+            'css' => 'blog.scss',
+            'blogs' => $blogs, // Pass the fetched blog data to the view
+        ]);
     }
 
-    public function getBlog()
+    public function getBlog($id)
     {
-        return view('blog')->with(['title' => 'Blogs | Ayuniya | ayuniya.com', 'css' => 'blog.scss']);
-    }
+        $blogs = Blog::orderBy('created_at', 'desc')->get(); // Retrieve blogs ordered by creation date
+        $blog = Blog::find($id);
 
+        return view('blog', [
+            'title' => 'Blogs | Ayuniya | ayuniya.com',
+            'blog' => $blog, // Pass the single blog data to the view
+            'blogs' => $blogs, // Pass the fetched blog data to the view
+            'css' => 'blog.scss'
+        ]);
+    }
 
     public function admin()
     {
@@ -44,64 +59,38 @@ class BlogController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    // public function store(Request $request)
-    // {
-
-    //         if ($request->file('blog_image')) {
-
-
-
-    //             $banner = time() . "-" . rand(0, 999999999) . '.' . $request->file('bannerimage')->extension();
-    //             $request->bannerimage->move(public_path('../../image.ayuniya.com/products'), $banner);
-
-    //             $blogs = blog::insert([
-    //                 "product_name" => $request->input('name'),
-    //                 "short_des" => $request->input('shortdes'),
-    //                 "long_des" => $request->input('longdes'),
-    //                 "category" => $request->input('category'),
-    //                 "banner" => $banner,
-    //                 "vendor" => $request->input('vendor'),
-    //                 "created_at" => date("Y-m-d")
-    //             ]);
-
-
-    //         } else {
-    //             $response = array(
-    //                 "error" => 1,
-    //                 "msg" => "Please select an image for the product"
-    //             );
-    //         }
-
-    //     return response(json_encode($response));
-    // }
     public function store(Request $request)
     {
-
-        $Blog = new  blog();
-
-        $blog_image = time() . "." . $request->image_add->getClientOriginalName();
-        $request->image_add->move(public_path('QR'), $blog_image);
-
-        $Blog->blog_image = $blog_image;
-        $Blog->blog_Title = $request->blog_Title;
-        $Blog->blog_dis = $request->blog_dis;
-
-
-        //dd($Blog);
-
+        // Validate incoming request data
+        $validatedData = $request->validate([
+            'blog_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max file size as needed
+            'blog_Title' => 'required|string',
+            'blog_dis' => 'required|string',
+        ]);
 
         try {
-            $data = $request->validated();
-            $Blog->save();
-            return redirect()->back()->with('message', 'New Blog post added Successfully');
+            // Handle image upload
+            $blog_image = time() . '.' . $request->file('blog_image')->getClientOriginalExtension();
+            $request->file('blog_image')->move(public_path('blog_images'), $blog_image);
+
+            // Create a new blog instance
+            $blog = new blog();
+            $blog->blog_image = $blog_image;
+            $blog->blog_Title = $validatedData['blog_Title'];
+            $blog->blog_dis = $validatedData['blog_dis'];
+            $blog->save();
+
+            // Return a JSON response on success
+            return response()->json([
+                'error' => 0,
+                'msg' => 'New Blog post added Successfully'
+            ]);
         } catch (\Exception $ex) {
-            return redirect()->back()->with('message', 'somthing went wrong' . $ex);
+            // Return a JSON response on failure
+            return response()->json([
+                'error' => 1,
+                'msg' => 'Something went wrong: ' . $ex->getMessage()
+            ]);
         }
     }
 
@@ -123,10 +112,38 @@ class BlogController extends Controller
      * @param  \App\Models\blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function edit(blog $blog)
+    public function update(Request $request)
     {
-        //
+        // Retrieve the data from the request
+        $blogId = $request->input('updateid');
+        $blogImage = $request->input('updateimage');
+        $blogTitle = $request->input('updatename');
+        $blogDescription = $request->input('updatedis');
+
+        // Find the blog entry
+        $blog = Blog::find($blogId);
+
+        // Update the blog entry
+        if ($blog) {
+            $blog->blog_image = $blogImage;
+            $blog->blog_Title = $blogTitle;
+            $blog->blog_dis = $blogDescription;
+
+            // Save the updated blog
+            $blog->save();
+
+            return response()->json([
+                'error' => 0,
+                'msg' => 'Blog updated successfully'
+            ]);
+        }
+
+        return response()->json([
+            'error' => 1,
+            'msg' => 'Failed to update blog'
+        ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -135,10 +152,7 @@ class BlogController extends Controller
      * @param  \App\Models\blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, blog $blog)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.

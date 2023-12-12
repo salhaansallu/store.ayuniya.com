@@ -52,8 +52,8 @@ Route::get('/services', function () {
     return view('services')->with(['title'=>'Hospital Booking | '.$app_name, 'css' => 'services.scss']);
 })->name('adbooking1');
 
-Route::get('/blog', [BlogController::class, 'index']);
-Route::get('/blog/{id}', [BlogController::class, 'getBlog']);
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{id}', [BlogController::class, 'getBlog'])->name('blog.getBlog');
 Route::get('/cart', [CartController::class, 'index']);
 Route::get('/appointment', [AppoinmentController::class, 'index']);
 Route::get('/shop', [ProductsController::class, 'index']);
@@ -103,7 +103,7 @@ Route::post('/update-status/{courier_name}/{track_code}/{track_link}', [OrdersCo
 Route::post('/update-status', [OrdersController::class, 'updateOrder']);
 Route::post('/vendor-register', [VendorPaymentsController::class, 'registerVendor']);
 Route::post('/vendor-pay', [VendorPaymentsController::class, 'payVendor']);
-Route::post('/delete-user', [Contact::class, 'delete']);
+Route::post('/delete-user', [ContactController::class, 'delete']);
 Route::post('/delete-preorder', [PreorderController::class, 'delete']);
 Route::post('/delete-contact', [ContactController::class, 'delete']);
 Route::post('/book', [AppoinmentController::class, 'book']);
@@ -112,7 +112,7 @@ Route::post('/update-product', [ProductsController::class, 'update']);
 Route::get('/web-admin/Preoders', [PreorderController::class, 'index']);
 Route::post('/delete-product', [ProductsController::class, 'delete']);
 Route::post('/delete-varient', [ProductsController::class, 'deleteVarient']);
-Route::post('/create-blogs', [BlogController::class, 'store']);
+Route::post('/create-blogs', [BlogController::class, 'store'])->name('create-blogs');
 Route::post('/delete-blogs', [BlogController::class, 'delete']);
 Route::post('/update-blogs', [BlogController::class, 'update']);
 

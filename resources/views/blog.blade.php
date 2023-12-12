@@ -4,70 +4,30 @@
     <div class="row blog-container blog-details">
         <div class="col-12 col-xxl-8 col-xl-8">
             <div class="main_img">
-                <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
+                <img src="{{ asset('blog_images/' . $blog->blog_image) }}" alt="">
             </div>
         </div>
         <div class="col-12 col-xxl-4 col-xl-4">
             <div class="blog">
+            @foreach ($blogs as $blog)
                 <div class="text-blog">
                     <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
+                        <img src="{{ asset('blog_images/' . $blog->blog_image) }}" alt="">
                     </div>
                     <div class="ctnt">
-                        <div class="title">Evolution of ayurveda</div>
+                        <div class="title">{{ $blog->blog_Title }}</div>
                         <div class="description">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            {{ $blog->blog_dis }}
                         </div>
                         <div class="readmore">
-                            <a href="" class="primary_btn">Read more <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{{ route('blog.getBlog', $blog->id) }}"  class="primary_btn">Read more <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
+                @endforeach
 
-                <div class="text-blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="ctnt">
-                        <div class="title">Evolution of ayurveda</div>
-                        <div class="description">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        </div>
-                        <div class="readmore">
-                            <a href="" class="primary_btn">Read more <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="text-blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="ctnt">
-                        <div class="title">Evolution of ayurveda</div>
-                        <div class="description">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        </div>
-                        <div class="readmore">
-                            <a href="" class="primary_btn">Read more <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="text-blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="ctnt">
-                        <div class="title">Evolution of ayurveda</div>
-                        <div class="description">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        </div>
-                        <div class="readmore">
-                            <a href="" class="primary_btn">Read more <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
 
 
             </div>
@@ -77,61 +37,10 @@
 
         <div class="single-blog">
             <div class="blog_title">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.
+                {{ $blog->blog_Title }}
             </div>
             <div class="description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy text ever since Lorem Ipsum is simply dummy text of the printing Lorem
-                Ipsum is
-                simply dummy text of the printing
-
-                and typesetting industry. Lorem Ipsum has been the ind ustry's standard dummy text ever since Lorem
-                Ipsum is
-                simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since Lorem Ipsum is simply dummy text
-                of the
-                printing Lorem Ipsum is simply
-
-                dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                dummy text
-                ever since Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the
-                printing
-                and typesetting industry.
-
-                Lorem Ipsum has been the industry's standard dummy text ever since Lorem Ipsum is simply dummy text
-                of the
-                printing Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                been the
-                industry's standard dummy text ever since Lorem Ipsum is simply dummy text of the printing Lorem
-                Ipsum is
-                simply dummy text of the printing
-
-                and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since Lorem
-                Ipsum is
-                simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since Lorem Ipsum is simply dummy text
-                of the
-                printing
-
-                the industry's standard dummy text ever since Lorem Ipsum is simply dummy text of the printing
-
-                Lorem Ipsum has been the industry's standard dummy text ever since Lorem Ipsum is simply dummy text
-                of the
-                printing Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                been the
-                industry's standard dummy text ever since Lorem Ipsum is simply dummy text of the printing Lorem
-                Ipsum is
-                simply dummy text of the printing
-
-                and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since Lorem
-                Ipsum is
-                simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since Lorem Ipsum is simply dummy text
-                of the
-                printing.
+                <b>{{ $blog->blog_dis }}</b>
             </div>
         </div>
 
@@ -141,54 +50,22 @@
             </div>
 
             <div class="blog-wrap">
-                <div class="blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="title">Evolution of ayurveda</div>
-                    <div class="description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </div>
-                    <div class="readmore">
-                        <a href="" class="primary_btn">Read more</a>
-                    </div>
+
+                @foreach ($blogs as $blog)
+            <div class="blog">
+                <div class="img">
+                    <img src="{{ asset('blog_images/' . $blog->blog_image) }}" alt="">
                 </div>
-                <div class="blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="title">Evolution of ayurveda</div>
-                    <div class="description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </div>
-                    <div class="readmore">
-                        <a href="" class="primary_btn">Read more</a>
-                    </div>
+                <div class="title">{{ $blog->blog_Title }}</div>
+                <div class="description">
+                    {{ $blog->blog_dis }}
                 </div>
-                <div class="blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="title">Evolution of ayurveda</div>
-                    <div class="description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </div>
-                    <div class="readmore">
-                        <a href="" class="primary_btn">Read more</a>
-                    </div>
+                <div class="readmore">
+                    <a href="{{ route('blog.getBlog', $blog->id) }}" class="primary_btn">Read more</a>
                 </div>
-                <div class="blog">
-                    <div class="img">
-                        <img src="{{ asset('assets/images/blog/blog1.png') }}" alt="">
-                    </div>
-                    <div class="title">Evolution of ayurveda</div>
-                    <div class="description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </div>
-                    <div class="readmore">
-                        <a href="" class="primary_btn">Read more</a>
-                    </div>
-                </div>
+            </div>
+        @endforeach
+
             </div>
         </div>
     </div>
