@@ -17,7 +17,7 @@ export default defineConfig({
                 'resources/sass/product.scss',
                 'resources/sass/services.scss',
                 'resources/sass/shop.scss',
-		'resources/sass/privacy_policy.scss',
+		        'resources/sass/privacy_policy.scss',
 
                 'resources/views/dashboard/sass/app.scss',
                 'resources/views/dashboard/sass/appointment.scss',

@@ -23,6 +23,10 @@ body {
     overflow-x: hidden;
 }
 
+.disabled-link {
+    pointer-events: none;
+}
+
 .product_header {
     width: 100%;
     background-color: var(--white--);

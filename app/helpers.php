@@ -119,11 +119,22 @@ function redirectCookie()
     setcookie('redirectAfterLogin',request()->getRequestUri(), time() + (86400), "/");
 }
 
-function getAddress($type)
+function setRecurringCart($status) {
+    if ($status == 'get') {
+        return isset($_COOKIE['recurringCart'])? $_COOKIE['recurringCart'] : false;
+    }
+    
+    if (setcookie('recurringCart', $status, time() + (86400), "/")) {
+        return true;
+    }
+}
+
+function getAddress($type, $user = 0)
 {
+    $user = $user == 0? Auth::user()->id : $user;
     $address = array();
     if (strtolower($type) == "shipping" || strtolower($type) == "billing") {
-        $address = address::where('type', '=', strtolower($type))->where('user_id', '=', Auth::user()->id)->get();
+        $address = address::where('type', '=', strtolower($type))->where('user_id', '=', $user)->get();
         if (count($address) > 0) {
             $address = array(
                 "has" => true,

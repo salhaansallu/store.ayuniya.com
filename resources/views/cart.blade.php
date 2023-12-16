@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col price">{{ currency(getProducts($cart->product_id)['varient'][0]['sales_price']) }}</div>
-                <div class="col qty"><input type="number" value="{{ $cart->cart_qty }}" min="1" max="10"><button id="update_cart" onclick="updateCart('{{ $cart->product_id }}', document.querySelector('#{{ $cart->product_id }} input').value)">Update</button></div>
+                <div class="col qty"><input type="number" value="{{ $cart->cart_qty }}" min="1" max="10" id="qty{{ $cart->product_id }}"><button id="update_cart" onclick="updateCart('{{ $cart->product_id }}', document.querySelector('#qty{{ $cart->product_id }}').value)">Update</button></div>
                 <div class="col total">{{ currency(getProducts($cart->product_id)['varient'][0]['sales_price']*$cart->cart_qty) }}</div>
                 <div class="col remove"><i onclick="deletecartajax('{{ $cart->product_id }}')" class="fa fa-trash"></i></div>
             </div>
@@ -49,7 +49,8 @@
     <div class="checkout">
         <div class="inner">
             <div class="total_inc mt-lg-3 mt-md-3" id="total_inc">Cart Total: <span>{{ get_cart_total() }}</span></div>
-            <div class="checkout_btn mt-lg-3 mt-md-3"><a href="/checkout"><button><i class="fa-regular fa-credit-card"></i> Proceed to checkout</button></a></div>
+            <div class="total_inc mt-lg-3 mt-md-3">Bill Every Month: <span style="margin-left: 140px"><input type="checkbox" name="" id="recurring"></span></div>
+            <div class="checkout_btn mt-lg-3 mt-md-3"><a id="checkout_btn" href="/checkout"><button><i class="fa-regular fa-credit-card"></i> Proceed to checkout</button></a></div>
         </div>
     </div>
 
@@ -105,5 +106,10 @@
                 toastr.error("Sorry, something went wrong. Please refresh the page", "Error");
             }
         }
+
+        $('#recurring').change(function (e) { 
+            e.preventDefault();
+            $("#checkout_btn").attr('href', '/checkout?recurring_cart='+$(this).is(":checked"));
+        });
     </script>
 @endsection
