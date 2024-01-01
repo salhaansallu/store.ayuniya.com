@@ -138,7 +138,7 @@ class account extends Controller
             $postal = sanitize($request->input('postal'));
             $city = sanitize($request->input('city'));
             $country = sanitize($request->input('country'));
-             
+
             if (!empty($address1) && !empty($postal) && !empty($city) && country($country)) {
 
                 if (getAddress('billing')['has']) {
@@ -159,8 +159,7 @@ class account extends Controller
                             "msg" => "Sorry something went wrong",
                         );
                     }
-                }
-                else {
+                } else {
                     $insert = new address();
                     $insert->address1 = $address1;
                     $insert->postal = $postal;
@@ -180,22 +179,18 @@ class account extends Controller
                         );
                     }
                 }
-                
-            }
-            else {
+            } else {
                 $data = array(
                     "error" => 1,
                     "msg" => "Every field is required",
                 );
             }
-            
-            
         } elseif ($request->input('action') == "shipping_update") {
             $address1 = sanitize($request->input('address1'));
             $postal = sanitize($request->input('postal'));
             $city = sanitize($request->input('city'));
             $country = sanitize($request->input('country'));
-             
+
             if (!empty($address1) && !empty($postal) && !empty($city) && country($country)) {
 
                 if (getAddress('shipping')['has']) {
@@ -216,8 +211,7 @@ class account extends Controller
                             "msg" => "Sorry something went wrong",
                         );
                     }
-                }
-                else {
+                } else {
                     $insert = new address();
                     $insert->address1 = $address1;
                     $insert->postal = $postal;
@@ -237,16 +231,13 @@ class account extends Controller
                         );
                     }
                 }
-                
-            }
-            else {
+            } else {
                 $data = array(
                     "error" => 1,
                     "msg" => "Every field is required",
                 );
             }
-        } 
-        else {
+        } else {
             $data = array(
                 'error' => 1,
                 'msg' => 'Invalid request!'
@@ -303,6 +294,30 @@ class account extends Controller
         }
 
         return response(json_encode($response));
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        if (Auth::check()) {
+            if (sanitize($request->input('action')) == 'deleteAccount') {
+                $delete = User::where('id', Auth::user()->id)->delete();
+                Session::flush();
+                Auth::logout();
+
+                if ($delete) {
+                    return redirect('/');
+                } else {
+                    echo '<script>alert("Sorry something went wrong")</script>';
+                    echo '<script>location.href="/"</script>';
+                }
+            } else {
+                echo '<script>alert("Sorry something went wrong")</script>';
+                echo '<script>location.href="/"</script>';
+            }
+        } else {
+            echo '<script>alert("Sorry something went wrong")</script>';
+            echo '<script>location.href="/"</script>';
+        }
     }
 
     /**

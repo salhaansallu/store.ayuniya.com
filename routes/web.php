@@ -99,6 +99,7 @@ Route::post('/account-update', [account::class, 'updateDetails']);
 Route::post('/password-update', [account::class, 'updatePassword']);
 Route::post('/get-district', [account::class, 'getDistrict']);
 Route::post('/get-city', [account::class, 'getCity']);
+Route::post('/delete-account', [account::class, 'deleteAccount']);
 
 Route::post('/update-category', [CategoriesController::class, 'updateCategory']);
 Route::post('/create-category', [CategoriesController::class, 'addCategory']);
