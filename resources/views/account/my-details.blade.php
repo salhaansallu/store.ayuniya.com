@@ -23,6 +23,26 @@
         <div class="btn_update">
             <button type="submit" class="primary_btn">Update</button>
         </div>
+        
+    </form>
+</div>
+
+<div class="card">
+    <form action="delete-account" id="deleteAccount" onsubmit="return false;" method="POST">
+        @csrf
+        <input type="hidden" name="action" value="deleteAccount" id="">
+        <div class="form_header">
+            <div class="sub">Delete Account</div>
+        </div>
+
+        <div class="txt_field">
+            <div class="label">Note: once account is deleted, account or account data can never be recovered</div>
+        </div>
+
+        <div class="btn_update">
+            <button type="submit" class="primary_btn" style="background-color: red;">Delete Account</button>
+        </div>
+        
     </form>
 </div>
 {{-- <div class="card">
@@ -136,6 +156,12 @@
                     }
                 }
             });
+        }
+    });
+
+    $("#deleteAccount").submit(function () {
+        if (confirm("Are you sure you want to delete?")) {
+            (this).submit();
         }
     });
 </script>

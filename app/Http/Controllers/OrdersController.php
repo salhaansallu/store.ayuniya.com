@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\address;
+use App\Models\currency;
 use App\Models\MainOrders;
 use App\Models\Orders;
 use App\Models\products;
+use App\Models\RecurringCart;
+use App\Models\RecurringCartProducts;
 use App\Models\User;
 use App\Models\varients;
 use App\Models\VendorPayments;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -21,7 +26,7 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        if (isAdmin() || isOrderManager() ||isCustomerCareManager())  {
+        if (isAdmin() || isOrderManager() || isCustomerCareManager()) {
             return view("dashboard.views.orders")->with(['css' => 'orders.scss']);
         } else {
             return redirect(route('login'));
@@ -44,8 +49,7 @@ class OrdersController extends Controller
                 <th><button class="red" onclick="updateStatus(' . $main_order[0]->id . ', 0)">Cancel order</button> <button class="green" onclick="updateStatus(' . $main_order[0]->id . ', 1)">Process</button></th>
             </tr>
             ';
-        }
-        elseif ($main_order[0]->status == "processing") {
+        } elseif ($main_order[0]->status == "processing") {
             $html = '
             <tr>
                 <th>Item</th>
@@ -55,8 +59,7 @@ class OrdersController extends Controller
                 <th><button class="red" onclick="updateStatus(' . $main_order[0]->id . ', 0)">Cancel order</button> <button class="green" onclick="updateStatus(' . $main_order[0]->id . ', 2)">Deliver</button></th>
             </tr>
             ';
-        }
-        else {
+        } else {
             $html = '
             <tr>
                 <th>Item</th>
@@ -148,7 +151,7 @@ class OrdersController extends Controller
 
         $response = array();
         if (sanitize($request->input('action')) == "update_status" && sanitize($request->input('id')) && sanitize($request->input('status'))) {
-            if (sanitize($request->input('status')) == "canceled" || sanitize($request->input('status')) == "delivered" || sanitize($request->input('status')) == "processing" ) {
+            if (sanitize($request->input('status')) == "canceled" || sanitize($request->input('status')) == "delivered" || sanitize($request->input('status')) == "processing") {
                 $order = MainOrders::where("id", "=", sanitize($request->input('id')));
                 if ($order->count() > 0) {
                     $order->update(["status" => sanitize($request->input('status'))]);
@@ -166,8 +169,7 @@ class OrdersController extends Controller
                         }
 
                         $order->update(["total_order" => $profit]);
-                    }
-                    elseif (sanitize($request->input('status')) == "delivered") {
+                    } elseif (sanitize($request->input('status')) == "delivered") {
                         $order->update([
                             "courier_name" => sanitize($request->input("courier_name")),
                             "hand_over_date" => date("d/m/Y"),
@@ -226,6 +228,74 @@ class OrdersController extends Controller
         // }
 
         return response(json_encode($response));
+    }
+
+    public function recurring()
+    {
+        if (isAdmin() || isOrderManager() || isCustomerCareManager()) {
+            $orders = RecurringCart::where('created_at', '<=', now())
+            ->whereRaw('DAY(`updated_at`) < DAY(`created_at`)')
+            ->get();
+            foreach ($orders as $key => $order) {
+                $order['products'] = RecurringCartProducts::where('cart_id', $order->cart_id)->get();
+            }
+            return view("dashboard.views.recurring_orders")->with(['css' => 'payment.scss', 'orders' => $orders]);
+        } else {
+            return redirect(route('login'));
+        }
+    }
+
+    public function bill(Request $request)
+    {
+        $carts = [];
+
+        if ($request->input('order_id') == 'all') {
+            $carts = DB::select('SELECT * FROM `recurring_carts` WHERE created_at <= CURDATE() AND DAY(`updated_at`) < DAY(`created_at`)');
+        }
+        else {
+            $carts = RecurringCart::where('cart_id', $request->input('order_id'))->get();
+        }
+
+        foreach ($carts as $key => $cart) {
+
+            $products = DB::select("select * from varients, recurring_cart_products where sku=product_id and cart_id='". $cart->cart_id ."'");
+
+            $orderno = MainOrders::latest('id')->first();
+            if ($orderno) {
+                $orderno = $orderno->order_number + 1;
+            } else {
+                $orderno = 1001;
+            }
+
+            $checkout = new MainOrders();
+            $checkout->order_number = $orderno;
+            $checkout->user_id = $cart->user_id;
+            $checkout->bill_address = getAddress("billing")['id'];
+            $checkout->ship_address = getAddress("shipping", $cart->cart_id)['address1'] . " <br /> " . getAddress("shipping", $cart->cart_id)['city'] . " <br /> " . getAddress("shipping", $cart->cart_id)['postal'] . " <br /> " . getAddress("shipping", $cart->cart_id)['country'];
+            $checkout->status = "pending";
+            if (getAddress("shipping", $cart->cart_id)['country'] == "Sri Lanka") {
+                $checkout->delivery_charge = getDelivery($products);
+            } else {
+                $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate * 65;
+            }
+
+            $checkout->total_order = 0.00;
+            if ($checkout->save()) {
+                foreach ($products as $pro) {
+                    $order = new Orders();
+                    $order->order_number = $orderno;
+                    $order->product_id = $pro->sku;
+                    $order->qty = $pro->cart_qty;
+                    $order->user_id = $cart->user_id;
+                    $order->total = (float)$pro->sales_price * (float)$pro->cart_qty;
+                    $order->save();
+                    varients::where("sku", "=", $pro->sku)->update(["qty" => $pro->qty - $pro->cart_qty]);
+                }
+            }
+            RecurringCart::where('cart_id', $cart->cart_id)->touch();
+        }
+
+            return response(json_encode(array("error"=>0, "msg"=>"Order Placed")));
     }
 
     public function printingOrders()

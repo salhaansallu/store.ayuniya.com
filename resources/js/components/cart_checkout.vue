@@ -4,6 +4,7 @@
 
 <script>
 export default {
+    props: ['recurring_cart'],
     data() {
         return {
             name: 'cart_checkout_btn'
@@ -19,7 +20,8 @@ export default {
                 postal: $("#postal").val(),
                 city: $("#city").val(),
                 country: $("#country").val(),
-                _token: $("meta[name='csrf-token']").attr('content')
+                recurring_cart: this.recurring_cart,
+                _token: $("meta[name='csrf-token']").attr('content'),
             })
             .then(function (response) {
                 document.cookie = "order_confirmed=false; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";

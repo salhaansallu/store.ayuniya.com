@@ -11,6 +11,8 @@ use App\Models\MainOrders;
 use App\Models\Orders;
 use App\Models\products;
 use App\Models\provinces;
+use App\Models\RecurringCart;
+use App\Models\RecurringCartProducts;
 use App\Models\varients;
 use App\Models\VendorPayments;
 use Illuminate\Http\Request;
@@ -169,6 +171,28 @@ class checkout extends Controller
                 }
 
                 if (country($country)) {
+
+                    if ($request->input('recurring_cart') == true) {
+                        $cart_id = rand(1111,99999).time();
+
+                        $recurring = new RecurringCart();
+                        $recurring->user_id = Auth::user()->id;
+                        $recurring->cart_id = $cart_id;
+                        $recurring->status = 'active';
+                        if ($recurring->save()) {
+                            $products = DB::select("select * from carts, varients where sku=product_id and user_id = " . Auth::user()->id);
+                            foreach ($products as $pro) {
+                                $recurring_pro = new RecurringCartProducts();
+                                $recurring_pro->product_id = $pro->sku;
+                                $recurring_pro->cart_qty = $pro->cart_qty;
+                                $recurring_pro->cart_id = $cart_id;
+                                $recurring_pro->save();
+                            }
+
+                            unset($products);
+                        }
+                    }
+
                     $checkout = new MainOrders();
                     $checkout->order_number = $orderno;
                     $checkout->user_id = Auth::user()->id;

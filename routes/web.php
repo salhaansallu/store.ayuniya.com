@@ -19,6 +19,7 @@ use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\User;
 use App\Http\Controllers\VendorPaymentsController;
 use App\Http\Controllers\ContactController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -86,10 +87,19 @@ Auth::routes();
 Route::post('/sendOtp', [User::class, 'sendOtp']);
 Route::post('/verifyOtp', [User::class, 'verifyOtp']);
 Route::post('/cart', [CartController::class, 'store']);
+
+Route::post('/recurring-cart', function (Request $request) {
+    if ($request->input('recurring_cart') == true || $request->input('recurring_cart') == true) {
+        if (setRecurringCart($request->input('recurring_cart'))) {
+            return response(json_encode(array('error'=>0, 'msg'=>'Recurring Cart Updated')));
+        }
+    }
+});
 Route::post('/account-update', [account::class, 'updateDetails']);
 Route::post('/password-update', [account::class, 'updatePassword']);
 Route::post('/get-district', [account::class, 'getDistrict']);
 Route::post('/get-city', [account::class, 'getCity']);
+Route::post('/delete-account', [account::class, 'deleteAccount']);
 
 Route::post('/update-category', [CategoriesController::class, 'updateCategory']);
 Route::post('/create-category', [CategoriesController::class, 'addCategory']);
@@ -103,7 +113,7 @@ Route::post('/update-status/{courier_name}/{track_code}/{track_link}', [OrdersCo
 Route::post('/update-status', [OrdersController::class, 'updateOrder']);
 Route::post('/vendor-register', [VendorPaymentsController::class, 'registerVendor']);
 Route::post('/vendor-pay', [VendorPaymentsController::class, 'payVendor']);
-Route::post('/delete-user', [ContactController::class, 'delete']);
+
 Route::post('/delete-preorder', [PreorderController::class, 'delete']);
 Route::post('/delete-contact', [ContactController::class, 'delete']);
 Route::post('/book', [AppoinmentController::class, 'book']);
@@ -128,6 +138,8 @@ Route::get('/web-admin/sub-categories', [SubCategoriesController::class, 'index'
 Route::get('/web-admin/products', [ProductsController::class, 'admin']);
 Route::get('/web-admin/blogs', [BlogController::class, 'admin']);
 Route::get('/web-admin/orders', [OrdersController::class, 'index']);
+Route::get('/web-admin/recurring-orders', [OrdersController::class, 'recurring']);
+Route::post('/web-admin/recurring-orders', [OrdersController::class, 'bill']);
 Route::get('/web-admin/appointment', [AppoinmentController::class, 'admin']);
 Route::get('/web-admin/users', [User::class, 'index']);
 Route::get('/web-admin/payments', [VendorPaymentsController::class, 'index']);

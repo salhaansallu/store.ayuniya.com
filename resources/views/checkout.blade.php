@@ -290,7 +290,7 @@
             @else
                 <div id="cartcheckout_btn">
                     <div class="proceed">
-                        <cartcheckout-btn />
+                        <cartcheckout-btn :recurring_cart="{{ isset($_GET['recurring_cart'])? $_GET['recurring_cart'] : false }}" />
                     </div>
                 </div>
             @endisset

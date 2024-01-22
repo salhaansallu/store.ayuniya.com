@@ -139,55 +139,51 @@ class CartController extends Controller
 
                 $varients = varients::where("sku", "=", sanitize($request->input('sku')))->get();
                 if ($varients && $varients->count() > 0) {
-                    foreach ($varients as $var) {
-                        if ($var->qty >= $request->input('qty') && $request->input('qty') != "" && is_numeric($request->input('qty'))) {
-                            if ($request->input('qty') > 0 && !empty($request->input('qty') != " " && $request->input('qty'))) {
+                    if (!empty($request->input('qty')) && is_numeric($request->input('qty')) && $varients[0]->qty >= $request->input('qty')) {
+                        if (!empty($request->input('qty')) && $request->input('qty') > 0) {
 
-                                $cartsverify = cart::where('product_id', '=', sanitize($request->input('sku')))->where('user_id', '=', Auth::user()->id)->get();
+                            $cartsverify = cart::where('product_id', '=', sanitize($request->input('sku')))->where('user_id', '=', Auth::user()->id)->get();
 
-                                if ($cartsverify && $cartsverify->count() > 0) {
-                                    foreach ($cartsverify as $cartitem) {
-                                        if ($request->input('qty') <= $var->qty) {
+                            if ($cartsverify && $cartsverify->count() > 0) {
+                                if ($request->input('qty') <= $varients[0]->qty) {
 
-                                            $cart_update = cart::where("id", "=", $cartitem->id)->update(['cart_qty' => sanitize($request->input('qty'))]);
+                                    $cart_update = cart::where("id", "=", $cartsverify[0]->id)->update(['cart_qty' => sanitize($request->input('qty'))]);
 
-                                            if ($cart_update) {
-                                                $response = array(
-                                                    "error" => 0,
-                                                    "msg" => "Cart updated successfully",
-                                                );
-                                            } else {
-                                                $response = array(
-                                                    "error" => 1,
-                                                    "msg" => "Error while updating cart",
-                                                );
-                                            }
-                                        } else {
-                                            $response = array(
-                                                "error" => 1,
-                                                "msg" => "Only " . $var->qty . " Items available",
-                                            );
-                                        }
+                                    if ($cart_update) {
+                                        $response = array(
+                                            "error" => 0,
+                                            "msg" => "Cart updated successfully",
+                                        );
+                                    } else {
+                                        $response = array(
+                                            "error" => 1,
+                                            "msg" => "Error while updating cart",
+                                        );
                                     }
                                 } else {
-
                                     $response = array(
                                         "error" => 1,
-                                        "msg" => "Sorry, something went wrong"
+                                        "msg" => "Only " . $varients[0]->qty . " Items available",
                                     );
                                 }
                             } else {
+
                                 $response = array(
                                     "error" => 1,
-                                    "msg" => "Please select atleast 1 quantity"
+                                    "msg" => "Sorry, something went wrong"
                                 );
                             }
                         } else {
                             $response = array(
                                 "error" => 1,
-                                "msg" => "Only " . $var->qty . " Items available"
+                                "msg" => "Please select atleast 1 quantity"
                             );
                         }
+                    } else {
+                        $response = array(
+                            "error" => 1,
+                            "msg" => "Only " . $varients[0]->qty . " Items available"
+                        );
                     }
                 } else {
                     $response = array(
