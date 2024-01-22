@@ -61,29 +61,31 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        // Validate incoming request data
-        $validatedData = $request->validate([
-            'blog_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max file size as needed
-            'blog_Title' => 'required|string',
-            'blog_dis' => 'required|string',
-        ]);
-
         try {
+            // Validate incoming request data
+            $validatedData = $request->validate([
+                'blog_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'blog_Title' => 'required|string',
+                'blog_dis' => 'required|string',
+                'blog_content' => 'required|string',
+            ]);
+
             // Handle image upload
             $blog_image = time() . '.' . $request->file('blog_image')->getClientOriginalExtension();
             $request->file('blog_image')->move(public_path('blog_images'), $blog_image);
 
             // Create a new blog instance
-            $blog = new blog();
+            $blog = new Blog();
             $blog->blog_image = $blog_image;
             $blog->blog_Title = $validatedData['blog_Title'];
             $blog->blog_dis = $validatedData['blog_dis'];
+            $blog->blog_content = $validatedData['blog_content'];
             $blog->save();
 
             // Return a JSON response on success
             return response()->json([
                 'error' => 0,
-                'msg' => 'New Blog post added Successfully'
+                'msg' => 'New Blog post added successfully'
             ]);
         } catch (\Exception $ex) {
             // Return a JSON response on failure
@@ -93,6 +95,7 @@ class BlogController extends Controller
             ]);
         }
     }
+
 
 
     /**
@@ -119,7 +122,7 @@ class BlogController extends Controller
         $blogImage = $request->input('updateimage');
         $blogTitle = $request->input('updatename');
         $blogDescription = $request->input('updatedis');
-
+        $blogContent = $request->input('updatecont');
         // Find the blog entry
         $blog = Blog::find($blogId);
 
@@ -128,7 +131,7 @@ class BlogController extends Controller
             $blog->blog_image = $blogImage;
             $blog->blog_Title = $blogTitle;
             $blog->blog_dis = $blogDescription;
-
+            $blog->blog_content = $blogContent;
             // Save the updated blog
             $blog->save();
 

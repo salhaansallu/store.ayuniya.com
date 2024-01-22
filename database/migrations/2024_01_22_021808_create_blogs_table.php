@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string("blog_image");
             $table->string("blog_Title");
             $table->string("blog_dis");
-            
+            $table->longText("blog_content");
+
             $table->timestamps();
         });
     }

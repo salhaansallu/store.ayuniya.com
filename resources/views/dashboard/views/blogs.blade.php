@@ -84,9 +84,16 @@
                         </div>
 
                         <div class="txt_field">
-                            <div class="label">Blog Description</div>
+                            <div class="label">Blog Description </div>
                             <div class="input">
-                                <textarea required name="blog_dis" id="blog_dis" cols="30" rows="10"></textarea>
+                                <input type="text" name="blog_dis" id="blog_dis" required>
+                            </div>
+                        </div>
+
+                        <div class="txt_field">
+                            <div class="label">Blog Content</div>
+                            <div class="input">
+                                <textarea required name="blog_content" id="blog_content" cols="30" rows="5"></textarea>
                             </div>
                         </div>
 
@@ -112,10 +119,10 @@
                         <div class="txt_field">
                             <div class="label">Blog Image</div>
                             <div class="input">
-                            <label for="blog_image" class="pictureupload">
-                                <i class="fa-solid fa-cloud-arrow-up"></i>
-                                <p id="selectedFileName">Click to upload image</p>
-                            </label>
+                                <label for="blog_image" class="pictureupload">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    <p id="selectedFileName">Click to upload image</p>
+                                </label>
                             </div>
                             <input type="text" name="updateimage" style="display: none" id="updateimage" accept="image/*"
                                 required>
@@ -124,8 +131,8 @@
                         <div class="txt_field">
                             <div class="label">Blog Title</div>
                             <div class="input">
-                                <input type="text" name="updatename" id="updatename" value="" required><input
-                                    type="hidden" name="updateid" id="updateid" value="" required>
+                                <input type="text" name="updatename" id="updatename" value="" required>
+                                <input type="hidden" name="updateid" id="updateid" value="" required>
                             </div>
                         </div>
 
@@ -133,7 +140,16 @@
                             <div class="label">Blog Description</div>
                             <div class="input">
                                 <input type="text" name="updatedis" id="updatedis" value="" required>
+                                <input type="hidden" name="updatedisid" id="updatedisid" value="" required>
+                            </div>
+                        </div>
 
+
+                        <div class="txt_field">
+                            <div class="label">Blog Content</div>
+                            <div class="input">
+                                 <textarea input type="text" name="updatecont" id="updatecont"  cols="30" rows="5" value="" required>
+                                 </textarea>
 
                             </div>
                         </div>
@@ -145,47 +161,48 @@
         </div>
     </div>
 
-<script>
-    $("#create_blog").submit(function(e) {
-        e.preventDefault();
-        var postData = new FormData($("#create_blog")[0]);
-        $(".secondary_btn").attr("disabled", true); // Assuming this is the correct button class
+    <script>
+        $("#create_blog").submit(function(e) {
+            e.preventDefault();
+            var postData = new FormData($("#create_blog")[0]);
+            $(".secondary_btn").attr("disabled", true); // Assuming this is the correct button class
 
-        $.ajax({
-            type: "post",
-            url: "{{ route('create-blogs') }}",
-            data: postData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                $(".secondary_btn").removeAttr("disabled");
+            $.ajax({
+                type: "post",
+                url: "{{ route('create-blogs') }}",
+                data: postData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $(".secondary_btn").removeAttr("disabled");
 
-                if (response.error == 0) {
-                    toastr.success(response.msg, "Success");
-                    $('#CreateModel').modal('hide'); // Close the modal
+                    if (response.error == 0) {
+                        toastr.success(response.msg, "Success");
+                        $('#CreateModel').modal('hide'); // Close the modal
 
-                    // Redirect to the blogs page after a short delay
-                    setTimeout(function() {
-                        window.location.href = "{{ url('/web-admin/blogs') }}";
-                    }, 1500);
-                } else {
-                    toastr.error(response.msg, "Error");
+                        // Redirect to the blogs page after a short delay
+                        setTimeout(function() {
+                            window.location.href = "{{ url('/web-admin/blogs') }}";
+                        }, 1500);
+                    } else {
+                        toastr.error(response.msg, "Error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    toastr.error(error, "Error");
+                    $(".secondary_btn").removeAttr("disabled");
                 }
-            },
-            error: function(xhr, status, error) {
-                toastr.error(error, "Error");
-                $(".secondary_btn").removeAttr("disabled");
-            }
+            });
         });
-    });
 
-        function updateBlog(id, blog_image, blog_Title, blog_dis) {
+        function updateBlog(id, blog_image, blog_Title, blog_dis, blog_content) {
             if (id != "" && id != " " && blog_image != "" && blog_image != " " && blog_Title != "" && blog_Title != " " &&
-                blog_dis != "" && blog_dis != " ") {
+                blog_dis != "" && blog_dis != " " && blog_content != "" && blog_content != " ") {
                 $("#updateid").val(id);
                 $("#updateimage").val(blog_image);
                 $("#updatename").val(blog_Title);
                 $("#updatedis").val(blog_dis);
+                $("#updatecont").val(blog_content);
                 $("#UpdateModel").modal('show');
             } else {
                 toastr.warning("Something went wrong");
@@ -196,7 +213,8 @@
             e.preventDefault();
             if ($("#updateid").val() != "" && $("#updateid").val() != " " && $("#updateimage").val() != "" && $(
                     "#updateimage").val() != " " && $("#updatename").val() != "" && $(
-                    "#updatename").val() != " " && $("#updatedis").val() != "" && $("#updatedis").val() != " ") {
+                    "#updatename").val() != " " && $("#updatedis").val() != "" && $("#updatedis").val() != " " && $(
+                    "#updatecont").val() != "" && $("#updatecont").val() != " ") {
                 $("#UpdateModel").modal('hide');
                 $.ajax({
                     type: "post",
