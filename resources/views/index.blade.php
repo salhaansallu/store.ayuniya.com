@@ -16,8 +16,26 @@
 
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" onclick="location.href='/'"
-                            src="{{ asset('assets/images/carousel/main.jpg') }}" class="d-block w-100"
+                        <img class="d-block w-100"
+                            src="https://image.ayuniya.com/banner/banner_1.webp" class="d-block w-100"
+                            alt="Ayuniya Hero Banner">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img class="d-block w-100"
+                            src="https://image.ayuniya.com/banner/banner_2.webp" class="d-block w-100"
+                            alt="Ayuniya Hero Banner">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img class="d-block w-100"
+                            src="https://image.ayuniya.com/banner/banner_3.webp" class="d-block w-100"
+                            alt="Ayuniya Hero Banner">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img class="d-block w-100"
+                            src="https://image.ayuniya.com/banner/banner_4.webp" class="d-block w-100"
                             alt="Ayuniya Hero Banner">
                     </div>
                 </div>
