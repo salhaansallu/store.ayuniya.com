@@ -28,8 +28,8 @@
                     <td>{{ $contacts->email }}</td>
                     <td>{{ $contacts->tp_no }}</td>
                     <td>{{ $contacts->message }}</td>
-                    <td>{{ date('Y-m-d', strtotime($contacts->created_at)) }}</td>
-                     <td><button onclick="deleteContact('{{ $contacts->id }}')">Detele</button></td>
+                    <td style="width: 15%;">{{ date('Y-m-d', strtotime($contacts->created_at)) }}</td>
+                    <td><button onclick="deleteContact('{{ $contacts->id }}')">Detele</button></td>
                 </tr>
                 @endforeach
             </tbody>
