@@ -14,7 +14,8 @@
                     <td>Name</td>
                     <td>Email</td>
                     <td>Mobile</td>
-                    <td>Address</td>
+                    <td>Message</td>
+                    <td>Date</td>
                     <td>Action</td>
 
                 </tr>
@@ -27,6 +28,7 @@
                     <td>{{ $contacts->email }}</td>
                     <td>{{ $contacts->tp_no }}</td>
                     <td>{{ $contacts->message }}</td>
+                    <td>{{ date('Y-m-d', strtotime($contacts->created_at)) }}</td>
                      <td><button onclick="deleteContact('{{ $contacts->id }}')">Detele</button></td>
                 </tr>
                 @endforeach
