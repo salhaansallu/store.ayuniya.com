@@ -39,7 +39,7 @@
                         <tr>
                             <td><img src="{{ validate_image($blog->blog_image) }}"> </td>
                             <td>{{ $blog->blog_Title }}</td>
-                            <td>{{ $blog->blog_dis }}</td>
+                            <td>{{ substr($blog->blog_dis, 0, 111) }}...</td>
                             <td> <!-- Inside the foreach loop where the update button is generated -->
                                 <button type="button"
                                     onclick="updateBlog('{{ $blog->id }}','{{ $blog->blog_image }}', '{{ $blog->blog_Title }}','{{ $blog->blog_dis }}')">
