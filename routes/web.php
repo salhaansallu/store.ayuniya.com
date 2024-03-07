@@ -8,7 +8,6 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\checkout;
-use App\Http\Controllers\CityController;
 use App\Http\Controllers\index;
 use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\OrdersController;
@@ -19,6 +18,7 @@ use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\User;
 use App\Http\Controllers\VendorPaymentsController;
 use App\Http\Controllers\ContactController;
+use App\Models\vendors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -147,6 +147,7 @@ Route::get('/web-admin/vendor-register', [VendorPaymentsController::class, 'regi
 Route::get('/web-admin/vendors', [VendorPaymentsController::class, 'list']);
 Route::get('/vendor-register/{id}', [VendorPaymentsController::class, 'verifyPage']);
 Route::post('/vendor-verify', [VendorPaymentsController::class, 'verify']);
+Route::post('/register-vendorcode', [VendorPaymentsController::class, 'GenerateCode']);
 Route::get('/print-orders', [OrdersController::class, 'printingOrders']);
 Route::post('/print-orders', [OrdersController::class, 'printOrders']);
 
@@ -154,3 +155,21 @@ Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPassw
 Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
+// Vendor Dashboard
+Route::prefix('vendor')->group(function () {
+
+    Route::get('/login', function() {
+        return view('site-vendors.login');
+    });
+
+    Route::post('/login', [VendorPaymentsController::class, 'login']);
+    Route::get('/dashboard', [VendorPaymentsController::class, 'dashboard']);
+    Route::get('/products', [VendorPaymentsController::class, 'products']);
+    Route::get('/orders', [VendorPaymentsController::class, 'orders']);
+    Route::post('/get-vendor-order', [VendorPaymentsController::class, 'getVendorOrder']);
+    Route::post('/delete-order', [VendorPaymentsController::class, 'deleteOrder']);
+    Route::post('/update-status', [VendorPaymentsController::class, 'updateOrder']);
+    Route::post('/logout', [VendorPaymentsController::class, 'logout']);
+
+});

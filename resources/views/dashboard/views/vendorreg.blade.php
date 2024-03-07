@@ -33,11 +33,20 @@
                     <input type="text" name="name" id="name" placeholder="Enter company name" required>
                 </div>
             </div>
+        </div>
+
+        <div class="d-flex">
+            <div class="input">
+                <div class="label">Company email <span>*</span></div>
+                <div class="txt_field">
+                    <input type="email" name="email" id="email"  placeholder="Enter company email" required>
+                </div>
+            </div>
 
             <div class="input">
-                <div class="label">Company email</div>
+                <div class="label">Password <span>*</span></div>
                 <div class="txt_field">
-                    <input type="email" name="email" id="email"  placeholder="Enter company email" >
+                    <input type="password" name="password" id="password" placeholder="Enter password" required>
                 </div>
             </div>
         </div>
@@ -176,7 +185,7 @@
                 if (response.error == 0) {
                     toastr.success(response.msg, "Success");
                     setInterval(() => {
-                        location.reload();
+                        location.href="/vendor/dashboard";
                     }, 2000);
                 }
                 else {

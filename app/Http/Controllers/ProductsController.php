@@ -161,7 +161,7 @@ class ProductsController extends Controller
                     "long_des" => $request->input('longdes'),
                     "category" => $request->input('category'),
                     "banner" => $banner,
-                    "vendor" => $request->input('vendor'),
+                    "vendor" => isVendor() ? Vendor()->id : $request->input('vendor'),
                     "created_at" => date("Y-m-d")
                 ]);
 
@@ -258,7 +258,7 @@ class ProductsController extends Controller
                 "short_des" => sanitize($request->input('shortdes')),
                 "long_des" => sanitize($request->input('longdes')),
                 "category" => sanitize($request->input('category')),
-                "vendor" => sanitize($request->input('vendor'))
+                "vendor" => isVendor() ? Vendor()->id : $request->input('vendor'),
             ]);
 
             if (sanitize($request->input('var_count')) > 0) {

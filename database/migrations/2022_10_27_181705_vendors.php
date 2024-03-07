@@ -15,24 +15,25 @@ return new class extends Migration
     {
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
-            $table->string("company_name");
-            $table->string("company_email");
-            $table->string("company_number");
-            $table->string("company_fax")->nullable();
-            $table->string("company_address1")->nullable();
-            $table->string("company_address2")->nullable();
-            $table->string("company_website")->nullable();
-            $table->string("business_type");
-            $table->string("store_name");
-            $table->string("license");
-            $table->string("registration");
-            $table->string("nop");
-            $table->string("payment_type");
-            $table->string("bank_name");
-            $table->string("branch_name");
-            $table->string("account_name");
-            $table->string("account_number");
-            $table->string("verify")->nullable();
+            $table->string("company_name")->default('');
+            $table->string("company_email")->default('');
+            $table->string("company_number")->default('');
+            $table->string("company_fax")->default('');
+            $table->string("company_address1")->default('');
+            $table->string("company_address2")->default('');
+            $table->string("company_website")->default('');
+            $table->string("business_type")->default('');
+            $table->string("store_name")->default('');
+            $table->string("license")->default('');
+            $table->string("registration")->default('');
+            $table->string("nop")->default('');
+            $table->string("payment_type")->default('');
+            $table->string("bank_name")->default('');
+            $table->string("branch_name")->default('');
+            $table->string("account_name")->default('');
+            $table->string("account_number")->default('');
+            $table->string("verify")->default('');
+            $table->string("password")->default('');
             $table->timestamps();
         });
     }

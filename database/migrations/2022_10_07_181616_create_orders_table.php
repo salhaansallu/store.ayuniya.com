@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("qty");
             $table->string("user_id");
             $table->string("total");
+            $table->string("status")->default('');
             $table->timestamps();
         });
     }

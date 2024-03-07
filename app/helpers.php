@@ -16,6 +16,7 @@ use App\Models\varients;
 use App\Models\VendorPayments;
 use App\Models\vendors;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Cookie;
-
+use Illuminate\Support\Facades\Crypt;
 
 function currency($price)
 {
@@ -432,6 +433,29 @@ function getProductCategory($id)
     } else {
         return "No category";
     }
+}
+
+function VendorOrderTotal($status, $data = false)
+{
+    $totalorders = null;
+    if ($data == false) {
+        if ($status == "delivered" || $status == "pending" || $status == "processing" || $status == "canceled") {
+            $totalorders = DB::select('select * from orders,products,varients where orders.product_id=varients.sku and varients.pro_id=products.id and products.vendor = "'. Vendor()->id .'" and orders.status="'.$status.'"');
+            $totalorders = count($totalorders);
+        }
+         else {
+            $totalorders = "Invalid order type";
+        }
+    } elseif ($data == true) {
+        if ($status == "processing" || $status == "pending" || $status == "delivered" || $status == "canceled") {
+            $totalorders = DB::select('select *, orders.qty, orders.created_at,orders.id, orders.status from orders, products, varients where orders.product_id=varients.sku and varients.pro_id=products.id and vendor="'. Vendor()->id .'" and orders.status="'. $status .'" ORDER BY orders.id DESC');
+            
+        }
+    }
+    else {
+        $totalorders = "Invalid count argument";
+    }
+    return $totalorders;
 }
 
 function orderTotal($status, $data = false)
@@ -856,6 +880,37 @@ function isAdmin()
     } else {
         return false;
     }
+    return false;
+}
+
+function isVendor()
+{
+    if (isset($_COOKIE['__vendor'])) {
+        $verify = vendors::where('company_email', Crypt::decrypt($_COOKIE['__vendor']))->first();
+        if ($verify->count() > 0) {
+            return true;
+        }
+        return false;
+    } 
+    return false;
+}
+
+function Vendor()
+{
+    if (isVendor()) {
+        return vendors::where('company_email', Crypt::decrypt($_COOKIE['__vendor']))->first();
+    }
+}
+
+function vendorLogout()
+{
+    if (isVendor()) {
+        if (Cookie::queue('__vendor', '', time() - 864000)) {
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
 
 function isCustomerCareManager()
