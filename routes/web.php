@@ -164,7 +164,7 @@ Route::prefix('vendor')->group(function () {
     });
 
     Route::post('/login', [VendorPaymentsController::class, 'login']);
-    Route::get('/dashboard', [VendorPaymentsController::class, 'dashboard']);
+    Route::get('/', [VendorPaymentsController::class, 'dashboard']);
     Route::get('/products', [VendorPaymentsController::class, 'products']);
     Route::get('/orders', [VendorPaymentsController::class, 'orders']);
     Route::post('/get-vendor-order', [VendorPaymentsController::class, 'getVendorOrder']);

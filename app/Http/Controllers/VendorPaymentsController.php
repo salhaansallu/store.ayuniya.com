@@ -325,7 +325,7 @@ class VendorPaymentsController extends Controller
         if ($verify->count() > 0) {
             if (Hash::check($password, $verify[0]->password)) {
                 Cookie::queue('__vendor', Crypt::encrypt($email), 864000);
-                return redirect('/vendor/dashboard');
+                return redirect('/vendor');
             }
         }
 

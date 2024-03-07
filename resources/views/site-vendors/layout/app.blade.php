@@ -32,7 +32,7 @@
             <div class="nav_item">
                 <ul>
                     @if (isVendor())
-                        <li><a href="/vendor/dashboard" class="active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                        <li><a href="/vendor" class="active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
                         <li><a href="/vendor/products"><i class="fa-solid fa-basket-shopping"></i> Products</a></li>
                         <li><a href="/vendor/orders"><i class="fa-solid fa-truck"></i> Orders ({{ VendorOrderTotal('pending') }})</a></li>
                     @endif
