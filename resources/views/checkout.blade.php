@@ -197,7 +197,7 @@
                         <div id="noAddressError" style="display: none; color: red;">
                             You do not have an existing address. Please fill in the address fields.
                         </div>
-                        <div class="txt_field">
+                        {{-- <div class="txt_field">
                             <div class="label">Country <span>*</span></div>
                             <div class="input">
                                 <select name="country" id="country">
@@ -206,7 +206,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="tab">
@@ -304,11 +304,13 @@
                 </div>
             </div>
 
-            <div>
-                <div class="proceed">
-                    <button class="" onclick="proceed(1)">Next</button>
+            @if (getAddress('shipping')['has'] == true)
+                <div>
+                    <div class="proceed">
+                        <button class="" onclick="proceed(1)">Next</button>
+                    </div>
                 </div>
-            </div>
+            @endif
 
         </div>
     </div>
@@ -419,7 +421,7 @@
                     <div class="txt">Discount :</div>
                     <div class="amount" id="order_sub_discount">
                         @isset($qty)
-                            @if (($products[0]->sales_price * $qty) >= 10000)
+                            @if ($products[0]->sales_price * $qty >= 10000)
                                 {{ currency(calcPercentage($products[0]->sales_price * $qty, 10)) }}
                             @else
                                 {{ currency(calcPercentage($products[0]->sales_price * $qty, 3)) }}
@@ -462,16 +464,16 @@
                 <div class="amount" id="order_total">
 
                     @isset($qty)
-                        @if (($products[0]->sales_price * $qty) >= 10000)
-                            {{ currency(($products[0]->sales_price * $qty - calcPercentage($products[0]->sales_price * $qty, 10)) + getDelivery($products[0]->sku, $qty)) }}
+                        @if ($products[0]->sales_price * $qty >= 10000)
+                            {{ currency($products[0]->sales_price * $qty - calcPercentage($products[0]->sales_price * $qty, 10) + getDelivery($products[0]->sku, $qty)) }}
                         @else
-                            {{ currency(($products[0]->sales_price * $qty - calcPercentage($products[0]->sales_price * $qty, 3)) + getDelivery($products[0]->sku, $qty)) }}
+                            {{ currency($products[0]->sales_price * $qty - calcPercentage($products[0]->sales_price * $qty, 3) + getDelivery($products[0]->sku, $qty)) }}
                         @endif
                     @else
                         @if (get_cart_total(false) >= 10000)
-                            {{ currency((get_cart_total(false) - calcPercentage(get_cart_total(false), 10)) + getDelivery($products)) }}
+                            {{ currency(get_cart_total(false) - calcPercentage(get_cart_total(false), 10) + getDelivery($products)) }}
                         @else
-                            {{ currency((get_cart_total(false) - calcPercentage(get_cart_total(false), 3)) + getDelivery($products)) }}
+                            {{ currency(get_cart_total(false) - calcPercentage(get_cart_total(false), 3) + getDelivery($products)) }}
                         @endif
                     @endisset
                 </div>
