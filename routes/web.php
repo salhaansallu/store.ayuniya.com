@@ -64,6 +64,7 @@ Route::get('/product/{id}/{name}', [product::class, 'index']);
 Route::post('/store-preorder', [PreorderController::class,'store']);
 Route::get('/checkout', [checkout::class, 'index']);
 Route::get('/check-address', [checkout::class, 'checkAddress']);
+Route::post('/upload-slip', [checkout::class, 'uploadSlip']);
 Route::get('/account', [account::class, 'index']);
 Route::get('/privacy_policy', [index::class, 'indexPrivacyPolicy']);
 Route::get('/Return_Policy', [index::class, 'indexreturnPolicy']);
@@ -138,6 +139,7 @@ Route::get('/web-admin/sub-categories', [SubCategoriesController::class, 'index'
 Route::get('/web-admin/products', [ProductsController::class, 'admin']);
 Route::get('/web-admin/blogs', [BlogController::class, 'admin']);
 Route::get('/web-admin/orders', [OrdersController::class, 'index']);
+Route::get('/web-admin/deposit-orders', [OrdersController::class, 'deposits']);
 Route::get('/web-admin/recurring-orders', [OrdersController::class, 'recurring']);
 Route::post('/web-admin/recurring-orders', [OrdersController::class, 'bill']);
 Route::get('/web-admin/appointment', [AppoinmentController::class, 'admin']);

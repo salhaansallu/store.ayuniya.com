@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string("hand_over_date")->default("");
             $table->string("track_code")->default("");
             $table->string("track_link")->default("");
+            $table->string("pay_method")->default("COD");
+            $table->string("slip")->default("");
             $table->timestamps();
         });
     }

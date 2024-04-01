@@ -54,8 +54,6 @@
 
             .all-steps {
                 text-align: center;
-                ;
-
             }
 
             .container input[type="radio"] {
@@ -63,13 +61,38 @@
                 opacity: 0;
                 cursor: pointer;
             }
+
+            .slipupload {
+                border: #bbbbbb 1px dashed;
+                padding: 20px 30px;
+                text-align: center;
+                color: var(--lightgrey--);
+                width: 100%;
+                margin-top: 100px;
+                cursor: pointer;
+            }
+
+            @media only screen and (max-width: 1250px) {
+                .slipupload {
+                    margin-top: 0px;
+                }
+            }
+
+            .slipupload b span {
+                color: var(--primary--);
+            }
+
+            .uploaded {
+                font-size: 25px;
+                color: var(--primary--);
+            }
         </style>
 
     </head>
 
 
     <div class="checkout">
-        <div class="container m-auto row row-cols-auto">
+        <div class="site-container m-auto row row-cols-auto">
             <div class="col overview">
                 @isset($products)
                     <div class="head">Order overview <span>(@isset($qty)
@@ -216,8 +239,10 @@
 
                     <div style="overflow:auto;" id="nextprevious">
                         <div style="float:right;">
-                            <button class="navigate_btn" type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                            <button class="navigate_btn" type="button" id="nextBtn" onclick="location.href='/account/address-book'" alt="">Go</button>
+                            <button class="navigate_btn" type="button" id="prevBtn"
+                                onclick="nextPrev(-1)">Previous</button>
+                            <button class="navigate_btn" type="button" id="nextBtn"
+                                onclick="location.href='/account/address-book'" alt="">Go</button>
 
 
                         </div>
@@ -279,7 +304,66 @@
                 </div>
             </div>
 
+            <div>
+                <div class="proceed">
+                    <button class="" onclick="proceed(1)">Next</button>
+                </div>
+            </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="checkout" style="display: none;">
+    <div class="site-container m-auto row row-cols-auto justify-content-evenly">
+        <div class="col summary">
+            <div class="head">Order summary</div>
+
+            <div class="amount_wrap">
+                <div class="sub_total">
+                    <div class="txt">Sub total :</div>
+                    <div class="amount" id="order_sub_total">
+                        @isset($qty)
+                            {{ currency($products[0]->sales_price * $qty) }}
+                        @else
+                            {{ get_cart_total() }}
+                        @endisset
+                    </div>
+                </div>
+
+                <div class="sub_total">
+                    <div class="txt">Delivery charge :</div>
+                    <div class="amount" id="order_delivery">
+                        @isset($qty)
+                            {{ currency(getDelivery($products[0]->sku, $qty)) }}
+                        @else
+                            {{ currency(getDelivery($products)) }}
+                        @endisset
+                    </div>
+                </div>
+
+                <div class="sub_total">
+                    <div class="txt">Total weight :</div>
+                    <div class="amount">
+                        @isset($qty)
+                            {{ $products[0]->weight * $qty }} kg
+                        @else
+                            {{ getTotalWeight($products) }} kg
+                        @endisset
+                    </div>
+                </div>
+            </div>
+
+            <div class="total">
+                <div class="txt">ORDER TOTAL</div>
+                <div class="amount" id="order_total">
+                    @isset($qty)
+                        {{ currency($products[0]->sales_price * $qty + getDelivery($products[0]->sku, $qty)) }}
+                    @else
+                        {{ currency(get_cart_total(false) + getDelivery($products)) }}
+                    @endisset
+                </div>
+            </div>
 
             @isset($qty)
                 <div id="checkout_btn">
@@ -290,15 +374,149 @@
             @else
                 <div id="cartcheckout_btn">
                     <div class="proceed">
-                        <cartcheckout-btn :recurring_cart="{{ isset($_GET['recurring_cart'])? $_GET['recurring_cart'] : false }}" />
+                        <cartcheckout-btn
+                            :recurring_cart="{{ isset($_GET['recurring_cart']) ? $_GET['recurring_cart'] : false }}" />
                     </div>
                 </div>
             @endisset
 
         </div>
+
+        <div class="col summary">
+
+            <div class="img">
+                <img src="{{ asset('assets/images/checkout/deposit_10.png') }}" style="width: 84%;" alt="">
+            </div>
+
+            <div>
+                <div class="proceed">
+                    <button type="button" onclick="proceed(2)">Claim Now</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
-<script></script>
+
+<div class="checkout" style="display: none;">
+    <div class="site-container m-auto row row-cols-auto">
+        <div class="col summary">
+            <div class="head">Order summary</div>
+
+            <div class="amount_wrap">
+                <div class="sub_total">
+                    <div class="txt">Sub total :</div>
+                    <div class="amount" id="order_sub_total">
+                        @isset($qty)
+                            {{ currency($products[0]->sales_price * $qty) }}
+                        @else
+                            {{ get_cart_total() }}
+                        @endisset
+                    </div>
+                </div>
+
+                <div class="sub_total">
+                    <div class="txt">Discount :</div>
+                    <div class="amount" id="order_sub_discount">
+                        @isset($qty)
+                            @if (($products[0]->sales_price * $qty) >= 10000)
+                                {{ currency(calcPercentage($products[0]->sales_price * $qty, 10)) }}
+                            @else
+                                {{ currency(calcPercentage($products[0]->sales_price * $qty, 3)) }}
+                            @endif
+                        @else
+                            @if (get_cart_total(false) >= 10000)
+                                {{ currency(calcPercentage(get_cart_total(false), 10)) }}
+                            @else
+                                {{ currency(calcPercentage(get_cart_total(false), 3)) }}
+                            @endif
+                        @endisset
+                    </div>
+                </div>
+
+                <div class="sub_total">
+                    <div class="txt">Delivery charge :</div>
+                    <div class="amount" id="order_delivery">
+                        @isset($qty)
+                            {{ currency(getDelivery($products[0]->sku, $qty)) }}
+                        @else
+                            {{ currency(getDelivery($products)) }}
+                        @endisset
+                    </div>
+                </div>
+
+                <div class="sub_total">
+                    <div class="txt">Total weight :</div>
+                    <div class="amount">
+                        @isset($qty)
+                            {{ $products[0]->weight * $qty }} kg
+                        @else
+                            {{ getTotalWeight($products) }} kg
+                        @endisset
+                    </div>
+                </div>
+            </div>
+
+            <div class="total">
+                <div class="txt">ORDER TOTAL</div>
+                <div class="amount" id="order_total">
+
+                    @isset($qty)
+                        @if (($products[0]->sales_price * $qty) >= 10000)
+                            {{ currency(($products[0]->sales_price * $qty - calcPercentage($products[0]->sales_price * $qty, 10)) + getDelivery($products[0]->sku, $qty)) }}
+                        @else
+                            {{ currency(($products[0]->sales_price * $qty - calcPercentage($products[0]->sales_price * $qty, 3)) + getDelivery($products[0]->sku, $qty)) }}
+                        @endif
+                    @else
+                        @if (get_cart_total(false) >= 10000)
+                            {{ currency((get_cart_total(false) - calcPercentage(get_cart_total(false), 10)) + getDelivery($products)) }}
+                        @else
+                            {{ currency((get_cart_total(false) - calcPercentage(get_cart_total(false), 3)) + getDelivery($products)) }}
+                        @endif
+                    @endisset
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col summary">
+            <div class="img">
+                <img src="{{ asset('assets/images/checkout/discount.png') }}" class="w-100" alt="">
+            </div>
+        </div>
+
+        <div class="col summary">
+
+            <label class="slipupload" for="slipUpload">
+                <div class="before_upload">
+                    <b><span>Upload a Slip</span> <br>or drag and drop</b>
+                    <input type="file" style="display: none;" id="slipUpload">
+                </div>
+                <div class="uploaded" style="display: none;">
+                    <i class="fa-solid fa-check"></i> Uploaded
+                </div>
+            </label>
+
+            @isset($qty)
+                <div id="discount_checkout_btn">
+                    <div class="proceed">
+                        <dis-checkout-btn :sku="'{{ $products[0]->sku }}'"
+                            :qty="'{{ $qty }}'"><dis-checkout-btn />
+                    </div>
+                </div>
+            @else
+                <div id="discount_cartcheckout_btn">
+                    <div class="proceed">
+                        <dis-cartcheckout-btn
+                            :recurring_cart="{{ isset($_GET['recurring_cart']) ? $_GET['recurring_cart'] : false }}" />
+                    </div>
+                </div>
+            @endisset
+        </div>
+    </div>
+</div>
+
+
 <script>
     @isset($qty)
 
@@ -350,6 +568,7 @@
         });
     @endisset
 </script>
+
 <script>
     $(document).ready(function() {
         // Define the mapping of postal codes to cities
@@ -2273,6 +2492,88 @@
     $('#proceedToCheckoutBtn').on('click', function() {
         // Collect data from form fields
         // Perform validation and proceed to checkout or display error messages
+    });
+
+    function validateFile(image, name = '') {
+        const validImageTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+        if (!image) {
+            toastr.error(name + " is required", 'Error');
+            return false;
+        } else if ((Math.round(+image.size.toString() / 1024) / 1000).toFixed(2) > 4) {
+            toastr.error("Please upload " + name + " smaller than 4MB", 'Error');
+            return false;
+        } else if ($.inArray(image['type'], validImageTypes) < 0) {
+            toastr.error("Please upload " + name + " with jpeg, jpg, png, or pdf file type", 'Error');
+            return false;
+        }
+        return true;
+    }
+
+    function uploadImage(file) {
+        var fd = new FormData();
+        fd.append('slip', file);
+        fd.append('_token', '{{ csrf_token() }}');
+        $.ajax({
+            type: "post",
+            url: "/upload-slip",
+            data: fd,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.error == 0) {
+                    $('.before_upload').hide();
+                    $('.uploaded').show();
+                    toastr.success(response.msg, 'Success');
+                    $('#discount_checkout_btn .proceed button').click();
+                } else {
+                    toastr.error(response.msg, 'Error');
+                }
+            }
+        });
+
+    }
+
+    function proceed(page) {
+        $('.checkout').eq(0).hide();
+        $('.checkout').eq(1).hide();
+        $('.checkout').eq(2).hide();
+        $('.checkout').eq(page).show();
+    }
+
+    $('#slipUpload').change(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var files = document.getElementById("slipUpload").files;
+        if (files.length == 1 && validateFile(files[0], 'bank slip')) {
+            uploadImage(files[0]);
+        }
+    });
+
+    $(document).ready(function() {
+        $(".slipupload").on({
+            dragover: function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass("dragover"); // Add visual effect on drag over
+            },
+            dragleave: function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass("dragover"); // Remove visual effect on drag leave
+            },
+            drop: function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass("dragover");
+
+                var files = e.originalEvent.dataTransfer.files;
+                if (files.length == 1 && validateFile(files[0], 'bank slip')) {
+                    uploadImage(files[0]);
+                }
+            }
+        });
     });
 </script>
 

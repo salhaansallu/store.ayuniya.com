@@ -237,83 +237,83 @@ function country($attr) {
 
 // function validateAddress($province, $district, $city)
 // {
-//     $arr = array();
+    //     $arr = array();
 
-//     if (!empty($province)) {
+    //     if (!empty($province)) {
 
-//         $province = provinces::where("name_en", "=", $province)->get();
-//         if ($province && count($province) > 0) {
+    //         $province = provinces::where("name_en", "=", $province)->get();
+    //         if ($province && count($province) > 0) {
 
-//             if (!empty($district)) {
+    //             if (!empty($district)) {
 
-//                 $district = districts::where("name_en", "=", $district)->get();
+    //                 $district = districts::where("name_en", "=", $district)->get();
 
-//                 if ($district && count($district) > 0) {
+    //                 if ($district && count($district) > 0) {
 
-//                     if ($district[0]->province_id == $province[0]->id) {
+    //                     if ($district[0]->province_id == $province[0]->id) {
 
-//                         if (!empty($city)) {
+    //                         if (!empty($city)) {
 
-//                             $city = cities::where("name_en", "=", $city)->get();
+    //                             $city = cities::where("name_en", "=", $city)->get();
 
-//                             if ($city && count($city) > 0) {
+    //                             if ($city && count($city) > 0) {
 
-//                                 if ($city[0]->district_id == $district[0]->id) {
+    //                                 if ($city[0]->district_id == $district[0]->id) {
 
-//                                     $arr = array(
-//                                         "error" => 0,
-//                                         "msg" => "success",
-//                                     );
-//                                 } else {
-//                                     $arr = array(
-//                                         "error" => 1,
-//                                         "msg" => "Invalid city",
-//                                     );
-//                                 }
-//                             } else {
-//                                 $arr = array(
-//                                     "error" => 1,
-//                                     "msg" => "Invalid city",
-//                                 );
-//                             }
-//                         } else {
-//                             $arr = array(
-//                                 "error" => 1,
-//                                 "msg" => "Invalid city",
-//                             );
-//                         }
-//                     } else {
-//                         $arr = array(
-//                             "error" => 1,
-//                             "msg" => "Invalid district",
-//                         );
-//                     }
-//                 } else {
-//                     $arr = array(
-//                         "error" => 1,
-//                         "msg" => "Invalid district",
-//                     );
-//                 }
-//             } else {
-//                 $arr = array(
-//                     "error" => 1,
-//                     "msg" => "Invalid district",
-//                 );
-//             }
-//         } else {
-//             $arr = array(
-//                 "error" => 1,
-//                 "msg" => "Invalid province",
-//             );
-//         }
-//     } else {
-//         $arr = array(
-//             "error" => 1,
-//             "msg" => "Invalid province",
-//         );
-//     }
+    //                                     $arr = array(
+    //                                         "error" => 0,
+    //                                         "msg" => "success",
+    //                                     );
+    //                                 } else {
+    //                                     $arr = array(
+    //                                         "error" => 1,
+    //                                         "msg" => "Invalid city",
+    //                                     );
+    //                                 }
+    //                             } else {
+    //                                 $arr = array(
+    //                                     "error" => 1,
+    //                                     "msg" => "Invalid city",
+    //                                 );
+    //                             }
+    //                         } else {
+    //                             $arr = array(
+    //                                 "error" => 1,
+    //                                 "msg" => "Invalid city",
+    //                             );
+    //                         }
+    //                     } else {
+    //                         $arr = array(
+    //                             "error" => 1,
+    //                             "msg" => "Invalid district",
+    //                         );
+    //                     }
+    //                 } else {
+    //                     $arr = array(
+    //                         "error" => 1,
+    //                         "msg" => "Invalid district",
+    //                     );
+    //                 }
+    //             } else {
+    //                 $arr = array(
+    //                     "error" => 1,
+    //                     "msg" => "Invalid district",
+    //                 );
+    //             }
+    //         } else {
+    //             $arr = array(
+    //                 "error" => 1,
+    //                 "msg" => "Invalid province",
+    //             );
+    //         }
+    //     } else {
+    //         $arr = array(
+    //             "error" => 1,
+    //             "msg" => "Invalid province",
+    //         );
+    //     }
 
-//     return $arr;
+    //     return $arr;
 // }
 
 function orderStatus($value)
@@ -527,14 +527,14 @@ function get_cart_total($currency = true)
     }
 }
 
-function getOrderTotal($order, $delivery = 0)
+function getOrderTotal($order, $delivery = 0, $discount = 0)
 {
     $total = 0;
     foreach ($order as $ordertotal) {
         $total += $ordertotal->total;
     }
 
-    return currency($total+$delivery);
+    return currency(($total-$discount)+$delivery);
 }
 
 function getTotalWeight($orders)
@@ -867,8 +867,6 @@ function generateInvioce($id)
     return asset('invoice/' . $reportname);
 }
 
-
-
 function isAdmin()
 {
     if (Auth::check()) {
@@ -926,7 +924,6 @@ function isCustomerCareManager()
     }
 }
 
-
 function isOrderManager()
 {
     if (Auth::check()) {
@@ -951,4 +948,9 @@ function isAccountManager()
     } else {
         return false;
     }
+}
+
+function calcPercentage($price, $percentage)
+{
+    return ($percentage / 100) * $price;
 }

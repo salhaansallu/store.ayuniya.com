@@ -4,10 +4,16 @@
 .checkout {
 
     .row {
-        justify-content: space-evenly;
+        justify-content: space-between;
+
+        @media only screen and (max-width: 800px) {
+            justify-content: center;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
 
         .overview {
-            height: 403px;
+            max-height: 403px;
             overflow-y: auto;
             overflow-x: hidden;
 
@@ -44,6 +50,10 @@
             background-color: #ffff;
             padding: 20px;
             margin-bottom: 20px;
+
+            @media only screen and (max-width: 1759px) {
+                width: 350px;
+            }
 
             @media only screen and (max-width: 426px) {
                 width: 350px;

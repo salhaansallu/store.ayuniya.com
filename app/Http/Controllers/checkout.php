@@ -3,6 +3,7 @@
 
 
 namespace App\Http\Controllers;
+
 use GuzzleHttp\Client;
 use App\Models\address;
 use App\Models\cart;
@@ -17,6 +18,7 @@ use App\Models\varients;
 use App\Models\VendorPayments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -26,7 +28,7 @@ class checkout extends Controller
     {
         redirectCookie();
         if (Auth::check()) {
-            $products = DB::select("select * from varients,carts,products where carts.product_id=varients.sku and varients.pro_id=products.id and carts.user_id=".Auth::user()->id);
+            $products = DB::select("select * from varients,carts,products where carts.product_id=varients.sku and varients.pro_id=products.id and carts.user_id=" . Auth::user()->id);
             if (count($products) > 0) {
                 return view('checkout')->with(['title' => 'Checkout | ' . config('app.name'), 'css' => 'checkout.scss', 'products' => $products]);
             } else {
@@ -35,9 +37,6 @@ class checkout extends Controller
         } else {
             return redirect(route('login'));
         }
-
-
-
     }
     public function checkAddress()
     {
@@ -49,9 +48,25 @@ class checkout extends Controller
         return response()->json(['addressExists' => $addressExists]);
     }
 
+    public function uploadSlip(Request $request)
+    {
+        if ($request->hasFile('slip') && $request->file('slip')->isValid()) {
+            try {
+                $filename = 'bank-slip-' . rand(11111, 999999) . time() . rand(1111, 99999) . '.' . $request->file('slip')->getClientOriginalExtension();
+                if ($request->file('slip')->move(public_path('../../image.ayuniya.com/payment-slip'), $filename)) {
+                    setcookie('promo_spm', Crypt::encrypt($filename), time() + (60 * 3));
 
+                    return response(json_encode(array("error" => 0, "msg" => "Payment slip uploaded successfully. Please checkout the order within 3 minutes before token expires")));
+                }
 
+                return response(json_encode(array("error" => 1, "msg" => "Couldn't upload payment slip")));
+            } catch (\Throwable $th) {
+                return response(json_encode(array("error" => 1, "msg" => "Couldn't upload payment slip")));
+            }
 
+            return response(json_encode(array("error" => 1, "msg" => "Couldn't upload payment slip")));
+        }
+    }
 
     public function buyNow(Request $request)
     {
@@ -104,13 +119,20 @@ class checkout extends Controller
                     $checkout->bill_address = getAddress("billing")['id'];
                     $checkout->ship_address = $address1 . " <br /> " . $city . " <br /> " . $postal . " <br /> " . $country;
                     $checkout->status = "pending";
+
+                    if (isset($_COOKIE['promo_spm']) && sanitize(Crypt::decrypt($_COOKIE['promo_spm'])) != false) {
+                        $checkout->pay_method = "Bank Transfer";
+                        $checkout->slip = sanitize(Crypt::decrypt($_COOKIE['promo_spm']));
+                    }
+
                     if ($country == "Sri Lanka") {
                         $checkout->delivery_charge = $delivery;
+                    } else {
+                        $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate * 65;
                     }
-                    else {
-                        $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate*65;
-                    }
+
                     $checkout->total_order = 0.00;
+                    
                     if ($checkout->save()) {
                         $order = new Orders();
                         $order->order_number = $orderno;
@@ -173,7 +195,7 @@ class checkout extends Controller
                 if (country($country)) {
 
                     if ($request->input('recurring_cart') == true) {
-                        $cart_id = rand(1111,99999).time();
+                        $cart_id = rand(1111, 99999) . time();
 
                         $recurring = new RecurringCart();
                         $recurring->user_id = Auth::user()->id;
@@ -199,11 +221,14 @@ class checkout extends Controller
                     $checkout->bill_address = getAddress("billing")['id'];
                     $checkout->ship_address = $address1 . " <br /> " . $city . " <br /> " . $postal . " <br /> " . $country;
                     $checkout->status = "pending";
+                    if (isset($_COOKIE['promo_spm']) && sanitize(Crypt::decrypt($_COOKIE['promo_spm'])) != false) {
+                        $checkout->pay_method = "Bank Transfer";
+                        $checkout->slip = sanitize(Crypt::decrypt($_COOKIE['promo_spm']));
+                    }
                     if ($country == "Sri Lanka") {
                         $checkout->delivery_charge = $delivery;
-                    }
-                    else {
-                        $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate*65;
+                    } else {
+                        $checkout->delivery_charge = (float)currency::where("type", "=", "USD")->get()[0]->rate * 65;
                     }
                     $checkout->total_order = 0.00;
                     if ($checkout->save()) {
@@ -227,8 +252,7 @@ class checkout extends Controller
                             "region" => $country
                         );
                     }
-                }
-                else {
+                } else {
                     $response = array(
                         "error" => 1,
                         "msg" => "Something went wrong"
@@ -250,10 +274,11 @@ class checkout extends Controller
         return response(json_encode($response));
     }
 
-    public function getTotal(Request $request) {
+    public function getTotal(Request $request)
+    {
         $response = json_encode(array(
-            "error"=>1,
-            "msg"=>"Sorry! Something went wrong"
+            "error" => 1,
+            "msg" => "Sorry! Something went wrong"
         ));
         $country = sanitize($request->input('country'));
         if (sanitize($request->input("get_total")) == "cart" && country($country)) {
@@ -262,39 +287,35 @@ class checkout extends Controller
 
             if ($country == "Sri Lanka") {
                 $response = json_encode(array(
-                    "error"=>0,
-                    "subtotal"=>currency($total),
-                    "del"=> currency(getDelivery($products)),
-                    "total"=> currency((float)getDelivery($products)+(float)$total),
+                    "error" => 0,
+                    "subtotal" => currency($total),
+                    "del" => currency(getDelivery($products)),
+                    "total" => currency((float)getDelivery($products) + (float)$total),
                 ));
-            }
-            else {
+            } else {
                 if (getTotalWeight($products) <= 2) {
                     if (getTotalWeight($products) >= 0.5) {
-                        $usdtotal = (float)$total/(float)currency::where("type", "=", "USD")->get()[0]->rate;
+                        $usdtotal = (float)$total / (float)currency::where("type", "=", "USD")->get()[0]->rate;
                         $response = json_encode(array(
-                            "error"=>0,
-                            "subtotal"=>"USD ".round((float)$usdtotal, 2),
-                            "del"=> "USD 65",
-                            "total"=> "USD ".round((float)$usdtotal+65, 2),
+                            "error" => 0,
+                            "subtotal" => "USD " . round((float)$usdtotal, 2),
+                            "del" => "USD 65",
+                            "total" => "USD " . round((float)$usdtotal + 65, 2),
+                        ));
+                    } else {
+                        $response = json_encode(array(
+                            "error" => 1,
+                            "msg" => "Order should be more than 0.5KG to be delivered"
                         ));
                     }
-                    else {
-                        $response = json_encode(array(
-                            "error"=>1,
-                            "msg"=>"Order should be more than 0.5KG to be delivered"
-                        ));
-                    }
-                }
-                else {
+                } else {
                     $response = json_encode(array(
-                        "error"=>1,
-                        "msg"=>"Orders more than 2KG can only be delivered to Sri Lanka"
+                        "error" => 1,
+                        "msg" => "Orders more than 2KG can only be delivered to Sri Lanka"
                     ));
                 }
             }
-        }
-        elseif (sanitize($request->input("get_total")) == "product" && country($country)) {
+        } elseif (sanitize($request->input("get_total")) == "product" && country($country)) {
             $sku = sanitize($request->input("sku"));
             $qty = sanitize($request->input("qty"));
             $products = varients::where("sku", "=", $sku)->get();
@@ -302,34 +323,31 @@ class checkout extends Controller
 
             if ($country == "Sri Lanka") {
                 $response = json_encode(array(
-                    "error"=>0,
-                    "subtotal"=>currency($total),
-                    "del"=> currency(getDelivery($products)),
-                    "total"=> currency((float)getDelivery($products)+(float)$total),
+                    "error" => 0,
+                    "subtotal" => currency($total),
+                    "del" => currency(getDelivery($products)),
+                    "total" => currency((float)getDelivery($products) + (float)$total),
                 ));
-            }
-            else {
+            } else {
                 if (($products[0]->weight * $qty) <= 2) {
                     if (($products[0]->weight * $qty) >= 0.5) {
-                        $usdtotal = (float)$total/(float)currency::where("type", "=", "USD")->get()[0]->rate;
+                        $usdtotal = (float)$total / (float)currency::where("type", "=", "USD")->get()[0]->rate;
                         $response = json_encode(array(
-                            "error"=>0,
-                            "subtotal"=>"USD ".round((float)$usdtotal, 2),
-                            "del"=> "USD 65",
-                            "total"=> "USD ".round((float)$usdtotal+65, 2),
+                            "error" => 0,
+                            "subtotal" => "USD " . round((float)$usdtotal, 2),
+                            "del" => "USD 65",
+                            "total" => "USD " . round((float)$usdtotal + 65, 2),
+                        ));
+                    } else {
+                        $response = json_encode(array(
+                            "error" => 1,
+                            "msg" => "Order should be more than 0.5KG to be delivered"
                         ));
                     }
-                    else {
-                        $response = json_encode(array(
-                            "error"=>1,
-                            "msg"=>"Order should be more than 0.5KG to be delivered"
-                        ));
-                    }
-                }
-                else {
+                } else {
                     $response = json_encode(array(
-                        "error"=>1,
-                        "msg"=>"Orders more than 2KG can only be delivered to Sri Lanka"
+                        "error" => 1,
+                        "msg" => "Orders more than 2KG can only be delivered to Sri Lanka"
                     ));
                 }
             }

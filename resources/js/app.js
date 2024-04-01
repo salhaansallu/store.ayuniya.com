@@ -28,6 +28,9 @@ const varient = createApp({});
 const cart_checkoutBtn = createApp({});
 const checkoutBtn = createApp({});
 
+const dis_cart_checkoutBtn = createApp({});
+const dis_checkoutBtn = createApp({});
+
 import pcsearch from './components/search.vue';
 app.component('pc-search', pcsearch);
 
@@ -45,6 +48,12 @@ cart_checkoutBtn.component('cartcheckout-btn', cart_checkout_btn);
 
 import checkout_btn from './components/checkout.vue';
 checkoutBtn.component('checkout-btn', checkout_btn);
+
+import dis_cart_checkout_btn from './components/dis_cart_checkout.vue';
+dis_cart_checkoutBtn.component('dis-cartcheckout-btn', dis_cart_checkout_btn);
+
+import dis_checkout_btn from './components/dis_checkout.vue';
+dis_checkoutBtn.component('dis-checkout-btn', dis_checkout_btn);
 
 
 
@@ -72,4 +81,7 @@ productBtn.mount('#product_action_btns');
 varient.mount('#varient');
 cart_checkoutBtn.mount('#cartcheckout_btn');
 checkoutBtn.mount('#checkout_btn');
+
+dis_cart_checkoutBtn.mount('#discount_cartcheckout_btn');
+dis_checkoutBtn.mount('#discount_checkout_btn');
 

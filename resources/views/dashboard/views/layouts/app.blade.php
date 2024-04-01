@@ -38,8 +38,8 @@
                                 categories</a></li>
                         <li><a href="/web-admin/products"><i class="fa-solid fa-basket-shopping"></i> Products</a></li>
                         <li><a href="/web-admin/contacts"><i class="fa-solid fa-message"></i> Messages</a></li>
-                        <li><a href="/web-admin/orders"><i class="fa-solid fa-truck"></i> Orders
-                                ({{ orderTotal('pending') }})</a></li>
+                        <li><a href="/web-admin/orders"><i class="fa-solid fa-truck"></i> Orders ({{ orderTotal('pending') }})</a></li>
+                        <li><a href="/web-admin/deposit-orders"><i class="fa-regular fa-money-bill-1"></i> Deposit Orders</a></li>
                         <li><a href="/web-admin/vendor-register"><i class="fa-solid fa-store"></i> Manufacturer register</a>
                         </li>
                         <li><a href="/web-admin/vendors"><i class="fa-solid fa-store"></i> Manufacturers</a></li>

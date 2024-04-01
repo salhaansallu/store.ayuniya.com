@@ -125,6 +125,7 @@
 
         @media only screen and (max-width: 460px) {
             width: 100%;
+            padding: 15px;
         }
 
 
@@ -244,6 +245,10 @@
                             justify-content: space-between;
                             margin-top: 20px;
 
+                            @media only screen and (max-width: 660px) {
+                                display: block;
+                            }
+
                             .image {
                                 display: flex;
 
@@ -290,10 +295,10 @@
 
                                 @media only screen and (max-width: 660px) {
                                     width: 100px;
-                                }
-
-                                @media only screen and (max-width: 460px) {
-                                    display: none;
+                                    font-size: 13px;
+                                    height: auto;
+                                    padding: 2px 10px;
+                                    width: 100%;
                                 }
                             }
 

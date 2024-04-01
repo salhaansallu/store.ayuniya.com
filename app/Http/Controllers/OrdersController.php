@@ -33,6 +33,18 @@ class OrdersController extends Controller
         }
     }
 
+    public function deposits()
+    {
+        if (isAdmin() || isOrderManager() || isCustomerCareManager()) {
+            $orders = MainOrders::where('status', 'pending')->where('slip', '!=', '')->get();
+            $p_orders = MainOrders::where('status', 'processing')->where('slip', '!=', '')->get();
+            $del_orders = MainOrders::where('status', 'delivered')->where('slip', '!=', '')->get();
+            return view("dashboard.views.deposit_orders")->with(['css' => 'orders.scss', 'd_orders'=>$orders, 'p_orders'=>$p_orders, 'del_orders'=>$del_orders]);
+        } else {
+            return redirect(route('login'));
+        }
+    }
+
     public function getOrder(Request $request)
     {
         $response = array();
@@ -158,8 +170,10 @@ class OrdersController extends Controller
                     $pros = Orders::where("order_number", "=", $order->get()[0]->order_number);
                     if (sanitize($request->input('status')) == "processing") {
                         $profit = 0;
+                        $pro_total = 0;
                         foreach ($pros->get() as $pro) {
                             $vendor_total = (75 / 100) * $pro->total;
+                            $pro_total += $pro->total;
                             $vendor = new VendorPayments();
                             $vendor->total_amount = $vendor_total;
                             $vendor->status = "pending";
@@ -168,11 +182,23 @@ class OrdersController extends Controller
                             $profit += $pro->total - $vendor_total;
                         }
 
-                        $order->update(["total_order" => $profit]);
+                        if ($order->get()[0]->slip == '') {
+                            $order->update(["total_order" => $profit]);
+                        }
+                        else {
+                            if ($pro_total >= 10000) {
+                                $order->update(["total_order" => $profit, "discount" => calcPercentage($pro_total, 10)]);
+                            }
+                            else {
+                                $order->update(["total_order" => $profit, "discount" => calcPercentage($pro_total, 3)]);
+                            }
+                        }
+
+                        
                     } elseif (sanitize($request->input('status')) == "delivered") {
                         $order->update([
                             "courier_name" => sanitize($request->input("courier_name")),
-                            "hand_over_date" => date("d/m/Y"),
+                            "hand_over_date" => Carbon::now(),
                             "track_code" => sanitize($request->input("track_code")),
                             "track_link" => sanitize($request->input("track_link")),
                         ]);

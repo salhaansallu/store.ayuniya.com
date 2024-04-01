@@ -12,7 +12,7 @@
             @if ($orders != "No orders")
                 @foreach ($orders as $order)
                     <div class="orders">
-                        <div class="order_head">Order ID : #{{ $order->order_number }} <span>Date: {{ date_format($order->created_at, "d-m-Y") }}</span> <span>Total: {{ getOrderTotal($order->orders, $order->delivery_charge) }}</span></div>
+                        <div class="order_head">Order ID : #{{ $order->order_number }} <span>Date: {{ date_format($order->created_at, "d-m-Y") }}</span> <span>Total: {{ getOrderTotal($order->orders, $order->delivery_charge, $order->discount) }}</span> <span>Discount: {{ currency($order->discount) }}</span></div>
                         <div class="products">
                             @foreach ($order->orders as $item)
                                 <div class="item">

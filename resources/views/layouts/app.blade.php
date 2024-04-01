@@ -277,7 +277,7 @@
                     <div class="contact_d">
                         <div class="dtl"><i class="fa fa-phone"></i> <a href="tel:+94764292602">+94 76 429 2602</a></div>
                         <div class="dtl"><i class="fa fa-envelope"></i> <a
-                                href="mailto:info@ayuniya.com">info@ayuniya.com</a></div>
+                                href="mailto:admin@ayuniya.com">admin@ayuniya.com</a></div>
                         <div class="dtl"><i class="fa-solid fa-location-dot"></i> <a>H3 building, IDB, Pallekale, Sri Lanka</a></div>
                     </div>
                 </div>
