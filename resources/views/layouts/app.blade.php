@@ -128,12 +128,12 @@
                 <div class="top_nav2">
                     <ul>
                         <li><a class="@if ($_SERVER['REQUEST_URI'] == '/') active @endif" href="/">Home</a></li>
-                        <li><a class="@if ($_SERVER['REQUEST_URI'] == '/appointment') active @endif" href="#">Services</a>
+                        {{-- <li><a class="@if ($_SERVER['REQUEST_URI'] == '/appointment') active @endif" href="#">Services</a>
                             <ul>
                                 <li><a href="/services">Hospital Booking</a></li>
 
                             </ul>
-                        </li>
+                        </li> --}}
                         <li><a class="@if ($_SERVER['REQUEST_URI'] == '/shop') active @endif" href="/shop">Shop</a></li>
                         <li><a class="@if ($_SERVER['REQUEST_URI'] == '/about-us') active @endif" href="/about-us">About</a></li>
                         @guest
@@ -228,11 +228,11 @@
                         <ul>
                             <li><a class="@if ($_SERVER['REQUEST_URI'] == '/') active @endif" class="active"
                                     href="/">Home</a></li>
-                            <li><a class="@if ($_SERVER['REQUEST_URI'] == '/appointment') active @endif" href="javascript:void(0)">Services</a>
+                            {{-- <li><a class="@if ($_SERVER['REQUEST_URI'] == '/appointment') active @endif" href="javascript:void(0)">Services</a>
                                 <ul>
                                     <li><a href="/services">Hospital Booking</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li><a class="@if ($_SERVER['REQUEST_URI'] == '/shop') active @endif" href="/shop">Shop</a>
                             </li>
                             <li><a class="@if ($_SERVER['REQUEST_URI'] == '/about-us') active @endif" href="/about-us">About</a>
@@ -286,7 +286,7 @@
                     <div class="head mt-lg-5 mt-md-5 mt-sm-3">Quick links</div>
                     <ul>
                         <li><a href="/">Home</a></li>
-                        <li><a href="/appointment">Service</a></li>
+                        {{-- <li><a href="/appointment">Service</a></li> --}}
                         <li><a href="/shop">Shop</a></li>
                         <li><a href="/about-us">About Us</a></li>
                         <li><a href="/privacy_policy">Privacy Policy</a></li>
