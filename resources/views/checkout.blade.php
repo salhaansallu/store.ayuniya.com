@@ -483,7 +483,7 @@
 
         <div class="col summary">
             <div class="img">
-                <img src="{{ asset('assets/images/checkout/discount.png') }}" class="w-100" alt="">
+                <img src="{{ asset('assets/images/checkout/discount_view.png') }}" class="w-100" alt="">
             </div>
         </div>
 
